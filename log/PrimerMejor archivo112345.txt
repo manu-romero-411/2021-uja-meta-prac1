@@ -1,0 +1,7 @@
+El coste de la solución inicial es x 
+Iteración Y 
+ Coste mejor: X 
+ Se acepta solución generada con coste XXX..... 
+El coste final es X 
+ Duración: 
+0
