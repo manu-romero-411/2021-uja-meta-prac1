@@ -11,20 +11,20 @@ import java.util.ArrayList;
  *
  * @author admin
  */
-public class PrimeroElMejor {
+public class AlgPrimerMejor {
 
     private final ArrayList<ArrayList<Integer>> conjuntos;
     private ArrayList<Integer> mejorCoste;
-    private final ArrayList<Archivodedatos> archivos;
+    private final ArrayList<ArchivoDatos> archivos;
 
-    public PrimeroElMejor(ArrayList<Archivodedatos> archivos) {
+    public AlgPrimerMejor(ArrayList<ArchivoDatos> archivos) {
         this.conjuntos = new ArrayList<>();
         this.mejorCoste = new ArrayList<>();
         this.archivos = archivos;
     }
 
     public void calculaPrimeroElMejor() {
-        Greedy greedyA = new Greedy();
+        AlgGreedy greedyA = new AlgGreedy();
         greedyA.meteArchivos(archivos);
         ArrayList<ArrayList<Integer>> greedy = greedyA.getConjuntos();
         mejorCoste = greedyA.getCosteConjuntos();
@@ -54,7 +54,7 @@ public class PrimeroElMejor {
     private boolean checkMove(int posI, int posJ, int costeMejor) {
         ArrayList<ArrayList<Integer>> auxConjuntos = this.conjuntos;
 
-        Greedy greedyA = new Greedy(auxConjuntos);
+        AlgGreedy greedyA = new AlgGreedy(auxConjuntos);
         greedyA.calculaGreedy();
         return true;
     }

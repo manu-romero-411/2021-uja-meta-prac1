@@ -21,18 +21,18 @@ public class prac1 {
      */
     public static void main(String[] args) {
 
-        ArrayList<Archivodedatos> arrayA = new ArrayList<>();
-        Configurador config = new Configurador(args[0]);
+        ArrayList<ArchivoDatos> listaArchivos = new ArrayList<>();
+        ArchivoConfig config = new ArchivoConfig(args[0]);
         System.out.println(config.getArchivos());
 
         //Añade a la lista de archivos los diferentes archivos de datos
         for (int i = 0; i < config.getArchivos().size(); i++) {
-            Archivodedatos archivo = new Archivodedatos(config.getArchivos().get(i));
-            arrayA.add(archivo);
+            ArchivoDatos archivo = new ArchivoDatos(config.getArchivos().get(i));
+            listaArchivos.add(archivo);
         }
 
-        Greedy greedy = new Greedy();
-        greedy.meteArchivos(arrayA);
+        AlgGreedy greedy = new AlgGreedy();
+        greedy.meteArchivos(listaArchivos);
         greedy.calculaGreedy();
     }
     

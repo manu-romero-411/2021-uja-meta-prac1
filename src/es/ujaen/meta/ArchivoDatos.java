@@ -13,13 +13,13 @@ import java.io.IOException;
  *
  * @author Usuario
  */
-public class Archivodedatos {
+public class ArchivoDatos {
 
     private String nombre;
     private int matriz1[][];
     private int matriz2[][];
 
-    public Archivodedatos(String rutaarchivo) {
+    public ArchivoDatos(String rutaarchivo) {
         String linea;
         nombre = rutaarchivo.split(".dat")[0];
         FileReader f = null;

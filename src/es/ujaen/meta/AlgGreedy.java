@@ -11,25 +11,25 @@ import java.util.ArrayList;
  *
  * @author admin
  */
-public class Greedy {
+public class AlgGreedy {
 
     private final ArrayList<ArrayList<Integer>> conjuntos;
     private final ArrayList<Integer> costeConjuntos;
-    private ArrayList<Archivodedatos> archivos;
+    private ArrayList<ArchivoDatos> archivos;
 
-    public Greedy() {
+    public AlgGreedy() {
         this.conjuntos = new ArrayList<>();
         this.costeConjuntos = new ArrayList<>();
         this.archivos = new ArrayList<>();
     }
 
-    public Greedy(ArrayList<ArrayList<Integer>> conjuntos) {
+    public AlgGreedy(ArrayList<ArrayList<Integer>> conjuntos) {
         this.conjuntos = conjuntos;
         this.costeConjuntos = new ArrayList<>();
         this.archivos = new ArrayList<>();
     }
 
-    public void meteArchivos(ArrayList<Archivodedatos> archivo) {
+    public void meteArchivos(ArrayList<ArchivoDatos> archivo) {
         this.archivos = archivo;
     }
 

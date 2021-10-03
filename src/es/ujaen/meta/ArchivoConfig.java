@@ -14,7 +14,7 @@ import java.util.ArrayList;
  *
  * @author Usuario
  */
-public class Configurador {
+public class ArchivoConfig {
 
     ArrayList<String> archivos;
     ArrayList<String> algoritmos;
@@ -22,7 +22,7 @@ public class Configurador {
 
     Integer parametroExtra;
 
-    public Configurador(String ruta) {
+    public ArchivoConfig(String ruta) {
         archivos = new ArrayList<>();
         algoritmos = new ArrayList<>();
         semillas = new ArrayList<>();
