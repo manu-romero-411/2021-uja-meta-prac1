@@ -25,7 +25,7 @@ public class AlgPrimerMejor {
 
     public void calculaPrimeroElMejor() {
         AlgGreedy greedyA = new AlgGreedy();
-        greedyA.meteArchivos(archivos);
+        greedyA.insertaArchivos(archivos);
         ArrayList<ArrayList<Integer>> greedy = greedyA.getConjuntos();
         mejorCoste = greedyA.getCosteConjuntos();
         boolean improve_flag = true;

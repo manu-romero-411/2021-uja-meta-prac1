@@ -19,8 +19,8 @@ public class prac1 {
     /**
      * @param args the command line arguments
      */
+    
     public static void main(String[] args) {
-
         ArrayList<ArchivoDatos> listaArchivos = new ArrayList<>();
         ArchivoConfig config = new ArchivoConfig(args[0]);
         System.out.println(config.getArchivos());
@@ -32,44 +32,8 @@ public class prac1 {
         }
 
         AlgGreedy greedy = new AlgGreedy();
-        greedy.meteArchivos(listaArchivos);
+        greedy.insertaArchivos(listaArchivos);
         greedy.calculaGreedy();
+        //FuncionesAuxiliares.muestraLista(listaArchivos);
     }
-    
-    
-
-    public static void guardarArchivo(String ruta, String texto) {
-        FileWriter fichero = null;
-        PrintWriter pw = null;
-        try {
-            fichero = new FileWriter(ruta);
-            pw = new PrintWriter(fichero);
-            pw.print(texto);
-        } catch (IOException e) {
-
-        } finally {
-            try {
-                if (null != fichero) {
-                    fichero.close();
-                }
-            } catch (IOException e2) {
-            }
-        }
-    }
-
-    public static void muestraArray(int array[]) {
-        for (int i = 0; i < array.length; i++) {
-            System.out.printf(array[i] + " ");
-        }
-    }
-
-    public static void muestraMatriz(int matriz[][]) {
-        for (int i = 0; i < matriz.length; i++) {
-            for (int j = 0; j < matriz.length; j++) {
-                System.out.printf(matriz[i][j] + " ");
-            }
-            System.out.println("");
-        }
-    }
-
 }
