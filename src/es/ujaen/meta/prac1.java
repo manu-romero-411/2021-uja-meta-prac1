@@ -9,10 +9,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  *
@@ -23,55 +19,57 @@ public class prac1 {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws InterruptedException {
-        Config config = new Config(args[0]);
-        System.out.println(config.getAlgoritmos());
-        
-        // CREAMOS UN ARRAYLIST DE ARCHIVOS
-        ArrayList<ArchivoDatos> archivos = new ArrayList<>();
-        for (int i = 0; i < config.getArchivos().size(); ++i){
-            archivos.add(new ArchivoDatos(config.getArchivos().get(i)));
+    public static void main(String[] args) {
+
+        ArrayList<Archivodedatos> arrayA = new ArrayList<>();
+        Configurador config = new Configurador(args[0]);
+        System.out.println(config.getArchivos());
+
+        //Añade a la lista de archivos los diferentes archivos de datos
+        for (int i = 0; i < config.getArchivos().size(); i++) {
+            Archivodedatos archivo = new Archivodedatos(config.getArchivos().get(i));
+            arrayA.add(archivo);
         }
-        
-   
-        ExecutorService ejecutor = Executors.newCachedThreadPool();
-        
-        for (int i = 0; i < config.getAlgoritmos().size(); ++i){
-            for (int j = 0; j < archivos.size(); ++j){
-                    CountDownLatch countdownlatch = new CountDownLatch(config.getSeeds().size());
-                    switch(config.getAlgoritmos().get(i)){
-                        case("PrimerMejor"):
-                            ArrayList<MHEjemplo> mh = new ArrayList();
-                            for (int k = 0; k < config.getSeeds().size(); ++k){
-                                MHEjemplo meta= new MHEjemplo(archivos.get(j), countdownlatch, config.getSeeds().get(k));
-                                mh.add(meta);
-                                ejecutor.execute(meta);
-                            }
-                            countdownlatch.await();
-                            for (int k = 0; k < mh.size(); ++k){
-                                guardarArchivo("log/" + config.getAlgoritmos().get(i) +" " + archivos.get(j).getFichero() + config.getSeeds().get(k) + ".txt", mh.get(k).getLog());
-                            }
-                            break;
-                    }
-            }
-        }
+
+        Greedy greedy = new Greedy();
+        greedy.meteArchivos(arrayA);
+        greedy.calculaGreedy();
     }
-    public static void guardarArchivo(String path, String texto){
-        FileWriter archivo = null;
+    
+    
+
+    public static void guardarArchivo(String ruta, String texto) {
+        FileWriter fichero = null;
         PrintWriter pw = null;
         try {
-            archivo = new FileWriter (path);
-            pw = new PrintWriter(archivo);
+            fichero = new FileWriter(ruta);
+            pw = new PrintWriter(fichero);
             pw.print(texto);
         } catch (IOException e) {
+
         } finally {
             try {
-                if(archivo != null){
-                    archivo.close();
+                if (null != fichero) {
+                    fichero.close();
                 }
             } catch (IOException e2) {
             }
         }
     }
-}
 
+    public static void muestraArray(int array[]) {
+        for (int i = 0; i < array.length; i++) {
+            System.out.printf(array[i] + " ");
+        }
+    }
+
+    public static void muestraMatriz(int matriz[][]) {
+        for (int i = 0; i < matriz.length; i++) {
+            for (int j = 0; j < matriz.length; j++) {
+                System.out.printf(matriz[i][j] + " ");
+            }
+            System.out.println("");
+        }
+    }
+
+}
