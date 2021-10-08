@@ -11,44 +11,36 @@ import java.util.ArrayList;
  *
  * @author admin
  */
-public class AlgGreedy {
+public class AlgGRE_Clase3_Grupo9 {
 
-    private final ArrayList<ArrayList<Integer>> conjuntos;
-    private final ArrayList<Integer> costeConjuntos;
-    private ArrayList<ArchivoDatos> archivos;
+    private ArrayList<Integer> conjunto;
+    private int costeConjunto;
+    private final Archivodedatos archivo;
 
-    public AlgGreedy() {
-        this.conjuntos = new ArrayList<>();
-        this.costeConjuntos = new ArrayList<>();
-        this.archivos = new ArrayList<>();
+    public AlgGRE_Clase3_Grupo9(Archivodedatos archivo) {
+        this.conjunto = new ArrayList<>();
+        this.costeConjunto = 0;
+        this.archivo = archivo;
     }
 
-    public AlgGreedy(ArrayList<ArrayList<Integer>> conjuntos) {
-        this.conjuntos = conjuntos;
-        this.costeConjuntos = new ArrayList<>();
-        this.archivos = new ArrayList<>();
-    }
-
-    public void meteArchivos(ArrayList<ArchivoDatos> archivo) {
-        this.archivos = archivo;
-    }
-
+    // Calcula el greedy haciendo las llamadas
     public void calculaGreedy() {
-        for (int i = 0; i < archivos.size(); i++) {
-            conjuntos.add(creaConjunto(archivos.get(i).getMatriz1(), archivos.get(i).getMatriz2()));
-        }
-
-        for (int i = 0; i < conjuntos.size(); i++) {
-            costeConjuntos.add(calculaCosteConjunto(conjuntos.get(i), archivos.get(i).getMatriz1(), archivos.get(i).getMatriz2()));
-            System.out.println("El conjunto " + i + " tiene un coste de " + costeConjuntos.get(i) + " y es el siguiente: ");
-            for (int j = 0; j < conjuntos.get(i).size(); j++) {
-                System.out.print(conjuntos.get(i).get(j) + "  ");
-            }
-            System.out.println();
-        }
+        creaConjunto(archivo.getMatriz1(), archivo.getMatriz2());
+        costeConjunto = calculaCosteConjunto(conjunto, archivo.getMatriz1(), archivo.getMatriz2());
     }
 
-    private int calculaCosteConjunto(ArrayList<Integer> conjunto, int matrizFlujo[][], int matrizDistancia[][]) {
+    // Muestra los datos (futuro log)
+    public String muestraDatos() {
+        System.out.println("El conjunto de archivos de datos " + archivo.getNombre() + " tiene un coste de " + costeConjunto + " y es el siguiente: ");
+        for (int i = 0; i < conjunto.size(); i++) {
+            System.out.print(conjunto.get(i) + "  ");
+        }
+        System.out.println();
+        return "El conjunto de archivos de datos " + archivo.getNombre() + " tiene un coste de " + costeConjunto + " y es el siguiente: ";
+    }
+
+    // Calcula el coste de un conjunto dado
+    public int calculaCosteConjunto(ArrayList<Integer> conjunto, int matrizFlujo[][], int matrizDistancia[][]) {
         int coste = 0;
         for (int i = 0; i < conjunto.size(); i++) {
             for (int j = 0; j < conjunto.size(); j++) {
@@ -58,7 +50,8 @@ public class AlgGreedy {
         return coste;
     }
 
-    private static ArrayList<Integer> creaConjunto(int matrizFlujo[][], int matrizDistancia[][]) {
+    // Crea el conjunto del greedy
+    private void creaConjunto(int matrizFlujo[][], int matrizDistancia[][]) {
         ArrayList<Integer> terminado = new ArrayList<>();
         ArrayList<Integer> auxF;
         ArrayList<Integer> auxD;
@@ -89,10 +82,10 @@ public class AlgGreedy {
             auxF.set(posF, Integer.MIN_VALUE);
             auxD.set(posD, Integer.MAX_VALUE);
         }
-
-        return terminado;
+        this.conjunto = terminado;
     }
 
+    // Función auxiliar que suma las filas de las matrices
     private static ArrayList<Integer> sumaFilas(int matriz[][]) {
         ArrayList<Integer> arrayS = new ArrayList<>();
         int sumador = 0;
@@ -106,11 +99,12 @@ public class AlgGreedy {
         return arrayS;
     }
 
-    public ArrayList<ArrayList<Integer>> getConjuntos() {
-        return conjuntos;
+    public ArrayList<Integer> getConjunto() {
+        return conjunto;
     }
 
-    public ArrayList<Integer> getCosteConjuntos() {
-        return costeConjuntos;
+    public int getCosteConjunto() {
+        return costeConjunto;
     }
+
 }

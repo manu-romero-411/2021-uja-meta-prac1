@@ -9,14 +9,21 @@ package es.ujaen.meta;
  *
  * @author Manuel
  */
-public class random {
+public class Random {
 
-    private float MASK = 2147483647;
-    private float PRIME = 65539;
-    private float SCALE = (float) 0.4656612875e-9; //he tenido que hacer aquí un cast, pero igual se puede hacer de otra forma...
+    private final float MASK;
+    private final float PRIME;
+    private final float SCALE;
 
-    private long Seed = 0L;
+    private long Seed;
 
+    
+    public Random(){
+        MASK = 2147483647;
+        PRIME = 65539;
+        SCALE = (float) 0.4656612875e-9;
+        Seed = 0L;
+    }
     /* Inicializa la semilla al valor 'x'.
     Solo debe llamarse a esta funcion una vez en todo el programa */
     public void setRandom(long x) {

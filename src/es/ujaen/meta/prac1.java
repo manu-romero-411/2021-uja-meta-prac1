@@ -20,23 +20,51 @@ public class prac1 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-
-        ArrayList<ArchivoDatos> listaArchivos = new ArrayList<>();
-        ArchivoConfig config = new ArchivoConfig(args[0]);
+        Configurador config = new Configurador(args[0]);
+        ArrayList<Archivodedatos> arrayA = new ArrayList<>();
+        Log log = new Log(config.getGuardar());
         System.out.println(config.getArchivos());
 
         //Añade a la lista de archivos los diferentes archivos de datos
         for (int i = 0; i < config.getArchivos().size(); i++) {
-            ArchivoDatos archivo = new ArchivoDatos(config.getArchivos().get(i));
-            listaArchivos.add(archivo);
+            Archivodedatos archivo = new Archivodedatos(config.getArchivos().get(i));
+            arrayA.add(archivo);
         }
 
-        AlgGreedy greedy = new AlgGreedy();
-        greedy.meteArchivos(listaArchivos);
-        greedy.calculaGreedy();
+        System.out.println("GREEDY");
+        for (int i = 0; i < arrayA.size(); i++) {
+            AlgGRE_Clase3_Grupo9 greedy = new AlgGRE_Clase3_Grupo9(arrayA.get(i));
+            greedy.calculaGreedy();
+            log.addTexto(greedy.muestraDatos());
+        }
+
+        System.out.println("");
+        System.out.println("PRIMERO EL MEJOR IT");
+        for (int i = 0; i < arrayA.size(); i++) {
+            AlgPMDLBit_Clase3_Grupo9 primero = new AlgPMDLBit_Clase3_Grupo9(arrayA.get(i), config.getIteraciones());
+            primero.calculaPrimeroElMejor();
+        }
+
+        System.out.println("");
+        System.out.println("PRIMERO EL MEJOR RAN");
+        for (int i = 0; i < arrayA.size(); i++) {
+            Random random = new Random();
+            random.setRandom(config.getSemillas().get(0));
+            AlgPMDLBrandom_Clase3_Grupo9 primeroAle = new AlgPMDLBrandom_Clase3_Grupo9(arrayA.get(i), config.getIteraciones(), random);
+            primeroAle.calculaPrimeroElMejor();
+        }
+
+        System.out.println("");
+        System.out.println("MULTIARRANQUE");
+        for (int i = 0; i < arrayA.size(); i++) {
+            Random random = new Random();
+            random.setRandom(config.getSemillas().get(0));
+            AlgMA_Clase3_Grupo9 primeroAle = new AlgMA_Clase3_Grupo9(arrayA.get(i), random);
+            primeroAle.calculaMultiarranque();
+        }
+
+        log.guardaLog();
     }
-    
-    
 
     public static void guardarArchivo(String ruta, String texto) {
         FileWriter fichero = null;
