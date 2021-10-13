@@ -12,8 +12,8 @@ import java.time.Clock;
  * @author Manuel
  */
 
-enum type_timer {REAL, VIRTUAL}; // No estoy muy convencido de dejar esta línea aquí :(
-public class timer {
+enum type_timer {REAL, VIRTUAL};
+public class Timer {
     private long start_time=System.nanoTime();
     private double elapsed;
     private Clock clock = Clock.systemDefaultZone();

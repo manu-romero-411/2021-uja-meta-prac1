@@ -14,15 +14,19 @@ import java.util.ArrayList;
  *
  * @author Usuario
  */
-public class ArchivoConfig {
+public class Configurador {
 
-    ArrayList<String> archivos;
-    ArrayList<String> algoritmos;
-    ArrayList<Long> semillas;
+    private ArrayList<String> archivos;
+    private ArrayList<String> algoritmos;
+    private ArrayList<Long> semillas;
+    private Integer iteraciones;
+    private String guardar;
+    private Integer maLongitudLRC;
+    private Integer maMejoresUnidades;
+    private Integer maTamLista;
 
-    Integer parametroExtra;
 
-    public ArchivoConfig(String ruta) {
+    public Configurador(String ruta) {
         archivos = new ArrayList<>();
         algoritmos = new ArrayList<>();
         semillas = new ArrayList<>();
@@ -59,8 +63,24 @@ public class ArchivoConfig {
                         }
                         break;
 
-                    case "Extra":
-                        parametroExtra = Integer.parseInt(split[1]);
+                    case "Iteraciones":
+                        iteraciones = Integer.parseInt(split[1]);
+                        break;
+                        
+                    case "MA-LongitudLRC":
+                        maLongitudLRC = Integer.parseInt(split[1]);
+                        break;
+                    
+                    case "MA-MejoresUnidades":
+                        maMejoresUnidades = Integer.parseInt(split[1]);
+                        break;
+                        
+                    case "MA-TamLista":
+                        maTamLista = Integer.parseInt(split[1]);
+                        break;
+                        
+                    case "Guardar":
+                        guardar = split[1];
                         break;
                 }
             }
@@ -82,8 +102,34 @@ public class ArchivoConfig {
         return semillas;
     }
 
-    public Integer getParametroExtra() {
-        return parametroExtra;
+    public Integer getIteraciones() {
+        return iteraciones;
     }
 
+    public String getGuardar() {
+        return guardar;
+    }
+
+    /**
+     * @return the maLongitudLRC
+     */
+    public Integer getMaLongitudLRC() {
+        return maLongitudLRC;
+    }
+
+    /**
+     * @return the tamLista
+     */
+    public Integer getMaTamLista() {
+        return maTamLista;
+    }
+
+    /**
+     * @return the maMejoresUnidades
+     */
+    public Integer getMaMejoresUnidades() {
+        return maMejoresUnidades;
+    }
+
+    
 }
