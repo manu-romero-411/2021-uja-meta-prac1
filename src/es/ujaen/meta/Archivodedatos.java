@@ -18,7 +18,6 @@ public class Archivodedatos {
     private String nombre;
     private int matriz1[][];
     private int matriz2[][];
-    private int iteraciones;
 
     public Archivodedatos(String rutaarchivo) {
         String linea;

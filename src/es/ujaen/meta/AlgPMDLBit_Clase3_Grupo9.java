@@ -35,40 +35,46 @@ public class AlgPMDLBit_Clase3_Grupo9 {
         boolean improve_flag = true;
         ArrayList<Boolean> dlb = new ArrayList<>();
         for (int i = 0; i < conjunto.size(); i++) {
-            dlb.add(Boolean.FALSE);
+            dlb.add(false);
         }
         boolean dlbCompleto = false;
         int fin = 0;
-        int k = 1;
-        int contI = dlb.size();
+        int cam = 0;
+        int k = 0;
         while (k < iteraciones && !dlbCompleto) {
             int i = fin;
-            if (dlb.get(i % dlb.size()) == Boolean.FALSE) {
+            if (dlb.get(i % dlb.size()) == false) {
                 improve_flag = false;
-                int contJ = dlb.size();
-                for (int j = i % dlb.size(); contJ > 0 && improve_flag == false; j++) {
+                int contJ = dlb.size() - 1;
+                for (int j = i + 1 % dlb.size(); contJ > 0 && improve_flag == false; j++) {
                     if (i % dlb.size() != j) {
-                        if (checkMove(i % dlb.size(), j % dlb.size(), greedyA)) {
+                        if (checkMove(i % dlb.size(), j % dlb.size())) {
                             applyMove(i % dlb.size(), j % dlb.size(), greedyA);
-                            dlb.set(i % dlb.size(), Boolean.FALSE);
-                            dlb.set(j % dlb.size(), Boolean.FALSE);
+                            cam++;
+                            dlb.set(i % dlb.size(), false);
+                            dlb.set(j % dlb.size(), false);
                             improve_flag = true;
-                            fin = conjunto.get(i);
-                            if (compruebaDLB(dlb)) {
-                                dlbCompleto = true;
-                            }
-
+                            fin = conjunto.get(j % dlb.size());
                         }
+                    }
+                    if (compruebaDLB(dlb)) {
+                        dlbCompleto = true;
                     }
                     contJ--;
                 }
                 if (improve_flag == false) {
-                    dlb.set(i, true);
+                    dlb.set(i % dlb.size(), true);
                 }
 
+            } else {
+                fin++;
+                if (fin >= 20) {
+                    fin = 0;
+                }
             }
             k++;
         }
+        System.out.println("es.ujaen.meta.AlgPMDLBit_Clase3_Grupo9.calculaPrimeroElMejor(): " + cam);
         mejorCoste = greedyA.calculaCosteConjunto(conjunto, archivo.getMatriz1(), archivo.getMatriz2());
         muestraDatos();
     }
@@ -92,17 +98,40 @@ public class AlgPMDLBit_Clase3_Grupo9 {
     }
 
     // Comprueba si el movimiento mejora
-    private boolean checkMove(int posI, int posJ, AlgGRE_Clase3_Grupo9 greedy) {
+    private boolean checkMove(int posI, int posJ) {
         ArrayList<Integer> auxConjunto = new ArrayList<>();
         for (int i = 0; i < conjunto.size(); i++) {
             auxConjunto.add(conjunto.get(i));
         }
-        int posAI = conjunto.get(posI);
-        int posAJ = conjunto.get(posJ);
-        auxConjunto.set(posI, posAJ);
-        auxConjunto.set(posJ, posAI);
+        int sum = 0;
+        int posR = conjunto.get(posI);
+        int posS = conjunto.get(posJ);
+        auxConjunto.set(posI, posS);
+        auxConjunto.set(posJ, posR);
+        int matrizF[][] = archivo.getMatriz1();
+        int matrizD[][] = archivo.getMatriz2();
 
-        return mejorCoste > greedy.calculaCosteConjunto(auxConjunto, archivo.getMatriz1(), archivo.getMatriz2());
+        AlgGRE_Clase3_Grupo9 greedyAux = new AlgGRE_Clase3_Grupo9(archivo);
+        int costeConjuntoActual = greedyAux.calculaCosteConjunto(conjunto, matrizF, matrizD);
+        int costeConjuntoMod = greedyAux.calculaCosteConjunto(auxConjunto, matrizF, matrizD);
+
+        for (int k = 0; k < auxConjunto.size(); k++) {
+
+            if (k != posR && k != posS) {
+                sum += (matrizF[posI][k] * (matrizD[posS][k] - matrizD[posI][k])
+                        + matrizF[posJ][k] * (matrizD[posR][k] - matrizD[posJ][k])
+                        + matrizF[k][posI] * (matrizD[k][posS] - matrizD[k][posI])
+                        + matrizF[k][posJ] * (matrizD[k][posR] - matrizD[k][posJ]));
+            }
+        }
+//        System.out.println("es.ujaen.meta.AlgPMDLBit_Clase3_Grupo9.checkMove() " + sum + " posI: " + posI + " posJ: " + posJ);
+        if (sum < 0) {
+//            System.out.println("Coste conjunto: " + costeConjuntoActual + " Coste auxConjunto: " + costeConjuntoMod);
+            return true;
+        } else {
+//            System.out.println("es.ujaen.meta.AlgPMDLBit_Clase3_Grupo9.checkMove(): " + sum);
+            return false;
+        }
     }
 
     // Aplica el movimiento de mejora

@@ -86,7 +86,7 @@ public class AlgGRE_Clase3_Grupo9 {
     }
 
     // Función auxiliar que suma las filas de las matrices
-    private static ArrayList<Integer> sumaFilas(int matriz[][]) {
+    public static ArrayList<Integer> sumaFilas(int matriz[][]) {
         ArrayList<Integer> arrayS = new ArrayList<>();
         int sumador = 0;
         for (int i = 0; i < matriz.length; i++) {

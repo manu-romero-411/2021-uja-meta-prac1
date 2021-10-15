@@ -20,6 +20,9 @@ public class Configurador {
     private ArrayList<String> algoritmos;
     private ArrayList<Long> semillas;
     private Integer iteraciones;
+    private Integer maLonguitudLRC;
+    private Integer maMejoresUnidades;
+    private Integer tamLista;
     private String guardar;
 
     public Configurador(String ruta) {
@@ -59,6 +62,19 @@ public class Configurador {
                         }
                         break;
 
+                    case "MA-LonguitudLRC":
+                        maLonguitudLRC = Integer.parseInt(split[1]);
+                        break;
+                        
+                    case "MA-MejoresUnidades":
+                        maMejoresUnidades = Integer.parseInt(split[1]);
+                        break;
+                        
+                    case "MA-TamLista":
+                        tamLista = Integer.parseInt(split[1]);
+                        break;
+                        
+                        
                     case "Iteraciones":
                         iteraciones = Integer.parseInt(split[1]);
                         break;
@@ -86,6 +102,18 @@ public class Configurador {
         return semillas;
     }
 
+    public Integer getMaLonguitudLRC() {
+        return maLonguitudLRC;
+    }
+
+    public Integer getMaMejoresUnidades() {
+        return maMejoresUnidades;
+    }
+
+    public Integer getTamLista() {
+        return tamLista;
+    }
+
     public Integer getIteraciones() {
         return iteraciones;
     }
@@ -94,5 +122,4 @@ public class Configurador {
         return guardar;
     }
 
-    
 }

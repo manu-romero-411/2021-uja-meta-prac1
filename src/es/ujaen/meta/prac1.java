@@ -9,6 +9,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Random;
+import javafx.util.Pair;
 
 /**
  *
@@ -23,6 +25,7 @@ public class prac1 {
         Configurador config = new Configurador(args[0]);
         ArrayList<Archivodedatos> arrayA = new ArrayList<>();
         Log log = new Log(config.getGuardar());
+        Random random = new Random(config.getSemillas().get(0));
         System.out.println(config.getArchivos());
 
         //Añade a la lista de archivos los diferentes archivos de datos
@@ -48,8 +51,6 @@ public class prac1 {
         System.out.println("");
         System.out.println("PRIMERO EL MEJOR RAN");
         for (int i = 0; i < arrayA.size(); i++) {
-            Random random = new Random();
-            random.setRandom(config.getSemillas().get(0));
             AlgPMDLBrandom_Clase3_Grupo9 primeroAle = new AlgPMDLBrandom_Clase3_Grupo9(arrayA.get(i), config.getIteraciones(), random);
             primeroAle.calculaPrimeroElMejor();
         }
@@ -57,10 +58,12 @@ public class prac1 {
         System.out.println("");
         System.out.println("MULTIARRANQUE");
         for (int i = 0; i < arrayA.size(); i++) {
-            Random random = new Random();
-            random.setRandom(config.getSemillas().get(0));
-            AlgMA_Clase3_Grupo9 primeroAle = new AlgMA_Clase3_Grupo9(arrayA.get(i), random);
-            primeroAle.calculaMultiarranque();
+            AlgMA_Clase3_Grupo9 multiA = new AlgMA_Clase3_Grupo9(arrayA.get(i), config.getMaLonguitudLRC(), config.getMaMejoresUnidades(), config.getTamLista(), random);
+            multiA.calculaMultiarranque();
+            ArrayList<Pair<Integer, Integer>> aux= multiA.getLRC();
+            for (int j = 0; j < aux.size(); j++) {
+                System.out.println("A: " + aux.get(i).getKey()+ " B: " + aux.get(i).getValue());
+            }
         }
 
         log.guardaLog();
