@@ -1,7 +1,8 @@
 Archivos=ford01.dat ford02.dat ford03.dat ford04.dat
-Semillas=77433193
+Semillas=77371841
 Algoritmos=Greedy
-Extra=34123
-Iteraciones=1000
+Iteraciones=2000
+Guardar=log
 MA-LongitudLRC=10
-MA-TamLista=
+MA-MejoresUnidades=5
+MA-TamLista=3

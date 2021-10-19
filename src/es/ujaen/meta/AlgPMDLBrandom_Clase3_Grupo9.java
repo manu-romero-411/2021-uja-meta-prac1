@@ -19,6 +19,7 @@ public class AlgPMDLBrandom_Clase3_Grupo9 {
     private final Archivodedatos archivo;
     private final int iteraciones;
     private final Random random;
+    private int aleatorio;
 
     public AlgPMDLBrandom_Clase3_Grupo9(Archivodedatos archivo, int iteraciones, Random random) {
         this.conjunto = new ArrayList<>();
@@ -40,10 +41,11 @@ public class AlgPMDLBrandom_Clase3_Grupo9 {
         for (int i = 0; i < conjunto.size(); i++) {
             dlb.add(Boolean.FALSE);
         }
-        int fin = random.nextInt(dlb.size());
+        int fin = aleatorio = random.nextInt(dlb.size());
         System.out.println("El valor de inicio es: " + fin);
         boolean dlbCompleto = false;
-        int k = 1;
+        int k = 0;
+        int cam=0;
         while (k < iteraciones && !dlbCompleto) {
             int i = fin;
             if (dlb.get(i % dlb.size()) == Boolean.FALSE) {
@@ -51,8 +53,9 @@ public class AlgPMDLBrandom_Clase3_Grupo9 {
                 int contJ = dlb.size();
                 for (int j = i % dlb.size(); contJ > 0 && improve_flag == false; j++) {
                     if (i % dlb.size() != j) {
-                        if (checkMove(i % dlb.size(), j % dlb.size(), greedyA)) {
+                        if (checkMove(i % dlb.size(), j % dlb.size())) {
                             applyMove(i % dlb.size(), j % dlb.size(), greedyA);
+                            cam++;
                             dlb.set(i % dlb.size(), Boolean.FALSE);
                             dlb.set(j % dlb.size(), Boolean.FALSE);
                             improve_flag = true;
@@ -60,7 +63,6 @@ public class AlgPMDLBrandom_Clase3_Grupo9 {
                             if (compruebaDLB(dlb)) {
                                 dlbCompleto = true;
                             }
-
                         }
                     }
                     contJ--;
@@ -72,13 +74,14 @@ public class AlgPMDLBrandom_Clase3_Grupo9 {
             }
             k++;
         }
+        System.out.println("es.ujaen.meta.AlgPMDLBrandom_Clase3_Grupo9.calculaPrimeroElMejor(): "+ cam);
         mejorCoste = greedyA.calculaCosteConjunto(conjunto, archivo.getMatriz1(), archivo.getMatriz2());
         muestraDatos();
     }
 
     // Muestra los datos (futuro log)
     private void muestraDatos() {
-        System.out.println("El conjunto de archivos de datos " + archivo.getNombre() + " con semilla: " + 123 + " tiene un coste de " + mejorCoste + " y es el siguiente: ");
+        System.out.println("El conjunto de archivos de datos " + archivo.getNombre() + " con semilla: " + " tiene un coste de " + mejorCoste + " y es el siguiente: ");
         for (int i = 0; i < conjunto.size(); i++) {
             System.out.print(conjunto.get(i) + "  ");
         }
@@ -86,17 +89,33 @@ public class AlgPMDLBrandom_Clase3_Grupo9 {
     }
 
     // Comprueba si el movimiento mejora
-    private boolean checkMove(int posI, int posJ, AlgGRE_Clase3_Grupo9 greedy) {
+    private boolean checkMove(int posI, int posJ) {
         ArrayList<Integer> auxConjunto = new ArrayList<>();
         for (int i = 0; i < conjunto.size(); i++) {
             auxConjunto.add(conjunto.get(i));
         }
+        int sum = 0;
         int posAI = conjunto.get(posI);
         int posAJ = conjunto.get(posJ);
         auxConjunto.set(posI, posAJ);
         auxConjunto.set(posJ, posAI);
+        int matrizF[][] = archivo.getMatriz1();
+        int matrizD[][] = archivo.getMatriz2();
 
-        return mejorCoste > greedy.calculaCosteConjunto(auxConjunto, archivo.getMatriz1(), archivo.getMatriz2());
+        for (int k = 0; k < auxConjunto.size(); k++) {
+            if (k != posI && k != posJ) {
+                sum += (matrizF[posI][k] * (matrizD[auxConjunto.get(posJ)][auxConjunto.get(k)] - matrizD[conjunto.get(posI)][conjunto.get(k)])
+                        + matrizF[posJ][k] * (matrizD[auxConjunto.get(posI)][auxConjunto.get(k)] - matrizD[conjunto.get(posJ)][conjunto.get(k)])
+                        + matrizF[k][posI] * (matrizD[auxConjunto.get(k)][auxConjunto.get(posJ)] - matrizD[conjunto.get(k)][conjunto.get(posI)])
+                        + matrizF[k][posI] * (matrizD[auxConjunto.get(k)][auxConjunto.get(posI)] - matrizD[conjunto.get(k)][conjunto.get(posJ)]));
+            }
+        }
+//        System.out.println("es.ujaen.meta.AlgPMDLBit_Clase3_Grupo9.checkMove() " + sum + " posI: " + posI + " posJ: " + posJ);
+        if (sum > 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     // Aplica el movimiento de mejora

@@ -20,11 +20,10 @@ public class Configurador {
     private ArrayList<String> algoritmos;
     private ArrayList<Long> semillas;
     private Integer iteraciones;
-    private String guardar;
-    private Integer maLongitudLRC;
+    private Integer maLonguitudLRC;
     private Integer maMejoresUnidades;
-    private Integer maTamLista;
-
+    private Integer tamLista;
+    private String guardar;
 
     public Configurador(String ruta) {
         archivos = new ArrayList<>();
@@ -63,22 +62,23 @@ public class Configurador {
                         }
                         break;
 
-                    case "Iteraciones":
-                        iteraciones = Integer.parseInt(split[1]);
+                    case "MA-LonguitudLRC":
+                        maLonguitudLRC = Integer.parseInt(split[1]);
                         break;
                         
-                    case "MA-LongitudLRC":
-                        maLongitudLRC = Integer.parseInt(split[1]);
-                        break;
-                    
                     case "MA-MejoresUnidades":
                         maMejoresUnidades = Integer.parseInt(split[1]);
                         break;
                         
                     case "MA-TamLista":
-                        maTamLista = Integer.parseInt(split[1]);
+                        tamLista = Integer.parseInt(split[1]);
                         break;
                         
+                        
+                    case "Iteraciones":
+                        iteraciones = Integer.parseInt(split[1]);
+                        break;
+
                     case "Guardar":
                         guardar = split[1];
                         break;
@@ -102,6 +102,18 @@ public class Configurador {
         return semillas;
     }
 
+    public Integer getMaLonguitudLRC() {
+        return maLonguitudLRC;
+    }
+
+    public Integer getMaMejoresUnidades() {
+        return maMejoresUnidades;
+    }
+
+    public Integer getTamLista() {
+        return tamLista;
+    }
+
     public Integer getIteraciones() {
         return iteraciones;
     }
@@ -110,26 +122,4 @@ public class Configurador {
         return guardar;
     }
 
-    /**
-     * @return the maLongitudLRC
-     */
-    public Integer getMaLongitudLRC() {
-        return maLongitudLRC;
-    }
-
-    /**
-     * @return the tamLista
-     */
-    public Integer getMaTamLista() {
-        return maTamLista;
-    }
-
-    /**
-     * @return the maMejoresUnidades
-     */
-    public Integer getMaMejoresUnidades() {
-        return maMejoresUnidades;
-    }
-
-    
 }

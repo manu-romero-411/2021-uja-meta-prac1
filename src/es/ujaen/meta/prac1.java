@@ -24,8 +24,8 @@ public class prac1 {
         Configurador config = new Configurador(args[0]);
         ArrayList<Archivodedatos> arrayA = new ArrayList<>();
         Log log = new Log(config.getGuardar());
-        System.out.println(config.getArchivos());
         Random random = new Random(config.getSemillas().get(0));
+        System.out.println(config.getArchivos());
 
         //Añade a la lista de archivos los diferentes archivos de datos
         for (int i = 0; i < config.getArchivos().size(); i++) {
@@ -41,14 +41,14 @@ public class prac1 {
         }
 
         System.out.println("");
-        System.out.println("PRIMERO EL MEJOR IT");
+        System.out.println("PRIMER MEJOR ITERATIVO");
         for (int i = 0; i < arrayA.size(); i++) {
             AlgPMDLBit_Clase3_Grupo9 primero = new AlgPMDLBit_Clase3_Grupo9(arrayA.get(i), config.getIteraciones());
             primero.calculaPrimeroElMejor();
         }
 
         System.out.println("");
-        System.out.println("PRIMERO EL MEJOR RAN");
+        System.out.println("PRIMER MEJOR RANDOM");
         for (int i = 0; i < arrayA.size(); i++) {
             AlgPMDLBrandom_Clase3_Grupo9 primeroAle = new AlgPMDLBrandom_Clase3_Grupo9(arrayA.get(i), config.getIteraciones(), random);
             primeroAle.calculaPrimeroElMejor();
@@ -57,8 +57,9 @@ public class prac1 {
         System.out.println("");
         System.out.println("MULTIARRANQUE");
         for (int i = 0; i < arrayA.size(); i++) {
-            AlgMA_Clase3_Grupo9 primeroAle = new AlgMA_Clase3_Grupo9(arrayA.get(i), config.getMaLongitudLRC(), config.getMaMejoresUnidades(), config.getMaTamLista(), random);
-            primeroAle.calculaMultiarranque();
+            //AlgMA_Clase3_Grupo9 multiA = new AlgMA_Clase3_Grupo9(arrayA.get(i), config.getMaLonguitudLRC(), config.getMaMejoresUnidades(), config.getTamLista(), random);
+            //multiA.calculaMultiarranque();
+            int a=1;
         }
 
         log.guardaLog();
@@ -87,6 +88,14 @@ public class prac1 {
         for (int i = 0; i < array.length; i++) {
             System.out.printf(array[i] + " ");
         }
+        System.out.println("");
+    }
+    
+    public static void muestraArray(ArrayList<Integer> array) {
+        for (int i = 0; i < array.size(); i++) {
+            System.out.printf(array.get(i) + " ");
+        }
+        System.out.println("");
     }
 
     public static void muestraMatriz(int matriz[][]) {

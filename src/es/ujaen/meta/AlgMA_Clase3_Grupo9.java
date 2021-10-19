@@ -5,6 +5,7 @@
  */
 package es.ujaen.meta;
 
+import javafx.util.Pair;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -17,26 +18,27 @@ public class AlgMA_Clase3_Grupo9 {
     private ArrayList<Integer> conjunto;
     private int costeGreedy;
     private final Archivodedatos archivo;
-    private Random random;
-    private ArrayList<ArrayList<Integer>> LRC;
-    private ArrayList<Integer> mayorFlujo;
-    private ArrayList<Integer> menorDistancia;
-    private int longitudLRC;
     private int mejoresUnidades;
     private int tamLista;
-    private ArrayList<Integer> listaTabu;
+    private Random random;
+    private ArrayList<Pair<Integer, Integer>> LRC;
+    private ArrayList<Pair<Integer, Integer>> listaTabu;
+    private ArrayList<Integer> mayorFlujo;
+    private ArrayList<Integer> mayorDistancia;
+    private int longitudLRC;
 
     public AlgMA_Clase3_Grupo9(Archivodedatos archivo, int longitudLRC, int mejoresUnidades, int tamLista, Random random) {
-        this.conjunto = new ArrayList<>();
-        this.costeGreedy = 0;
         this.archivo = archivo;
-        this.random = random;
-        this.LRC = new ArrayList<>();
         this.longitudLRC = longitudLRC;
-        this.mayorFlujo = new ArrayList<>();
-        this.menorDistancia = new ArrayList<>();
+        this.mejoresUnidades = mejoresUnidades;
         this.tamLista = tamLista;
-        this.listaTabu = new ArrayList();
+        this.random = random;
+        this.costeGreedy = 0;
+        this.conjunto = new ArrayList<>();
+        this.LRC = new ArrayList<>();
+        this.mayorDistancia = new ArrayList<>();
+        this.mayorFlujo = new ArrayList<>();
+        this.listaTabu = new ArrayList<>();
     }
 
     // Calcula el multiarranque
@@ -48,33 +50,47 @@ public class AlgMA_Clase3_Grupo9 {
             greedy.calculaGreedy();
             conjunto = greedy.getConjunto();
             costeGreedy = greedy.getCosteConjunto();
-            
-            ArrayList<Integer> arrayAuxFlujos = greedy.sumaFilas(archivo.getMatriz1());
+            ArrayList<Integer> arrayAuxFlujos = AlgGRE_Clase3_Grupo9.sumaFilas(archivo.getMatriz1());
             arrayAuxFlujos.sort((o1, o2) -> o1.compareTo(o2));
-            ArrayList<Integer> arrayAuxDist = greedy.sumaFilas(archivo.getMatriz2());
-            arrayAuxDist.sort((o1, o2) -> o2.compareTo(o1));
+            ArrayList<Integer> arrayAuxDist = AlgGRE_Clase3_Grupo9.sumaFilas(archivo.getMatriz2());
+            arrayAuxDist.sort((o2, o1) -> o2.compareTo(o1));
             for (int j = 0; j < mejoresUnidades; j++) {
-                mayorFlujo.add(arrayAuxFlujos.get(i));
+                mayorFlujo.add(arrayAuxFlujos.get(j));
+                mayorDistancia.add(arrayAuxDist.get(j));
             }
             for (int j = 0; j < mejoresUnidades; j++) {
-                menorDistancia.add(arrayAuxDist.get(i));
+                Pair<Integer, Integer> aux = new Pair<>(mayorDistancia.get(j), mayorFlujo.get(j));
+                anadirElementoLRC(aux);
             }
-            
-            int aleat1 = random.nextInt(mejoresUnidades);
-            int aleat2 = random.nextInt(mejoresUnidades);
-            
-            conjunto.set(aleat1, aleat2);
-            LRC.add(conjunto);
+        }
+        
+        for (int i = 0; i < longitudLRC; i++) {
+            Pair<Integer, Integer> aux = LRC.get(i);
         }
         
     }
-    
-    public void seleccionarSolucion(){
-        
+
+    // Muestra los datos (futuro log)
+    private void muestraDatos() {
+        System.out.println("El conjunto de archivos de datos " + archivo.getNombre() + " tiene un coste de " + costeGreedy + " y es el siguiente: ");
+        for (int i = 0; i < conjunto.size(); i++) {
+            System.out.print(conjunto.get(i) + "  ");
+        }
+        System.out.println();
     }
 
+    private void anadirElementoLRC(Pair<Integer, Integer> elemento) {
+        if (LRC.size() - 1 == longitudLRC) {
+            for (int i = 0; i < longitudLRC - 1; i++) {
+                LRC.set(i, LRC.get(i + 1));
+            }
+            LRC.set(longitudLRC, elemento);
+        } else {
+            LRC.add(elemento);
+        }
+    }
     
-    void insertarEnListaIntercambio(int elemento) {
+    private void anadirElementoTabu(Pair<Integer, Integer> elemento) {
         if (listaTabu.size() - 1 == tamLista) {
             for (int i = 0; i < tamLista - 1; i++) {
                 listaTabu.set(i, listaTabu.get(i + 1));
@@ -84,14 +100,9 @@ public class AlgMA_Clase3_Grupo9 {
             listaTabu.add(elemento);
         }
     }
-        
-    // Muestra los datos (futuro log)
-    private void muestraDatos() {
-        System.out.println("El conjunto de archivos de datos " + archivo.getNombre() + " tiene un coste de " + costeGreedy + " y es el siguiente: ");
-        for (int i = 0; i < conjunto.size(); i++) {
-            System.out.print(conjunto.get(i) + "  ");
-        }
-        System.out.println();
+
+    public ArrayList<Integer> getMayorDistancia() {
+        return mayorDistancia;
     }
 
     public ArrayList<Integer> getConjuntos() {
