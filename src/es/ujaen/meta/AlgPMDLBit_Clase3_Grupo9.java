@@ -32,29 +32,29 @@ public class AlgPMDLBit_Clase3_Grupo9 {
         this.conjunto = greedyA.getConjunto();
         this.mejorCoste = greedyA.getCosteConjunto();
         System.out.println("El mejor coste de " + archivo.getNombre() + " es: " + mejorCoste);
-        boolean improve_flag = true;
+        boolean flagMejora = true;
         ArrayList<Boolean> dlb = new ArrayList<>();
         for (int i = 0; i < conjunto.size(); i++) {
             dlb.add(false);
         }
         boolean dlbCompleto = false;
-        int fin = 0;
+        int ultMov = 0;
         int cam = 0;
         int k = 0;
         while (k < iteraciones && !dlbCompleto) {
-            int i = fin;
+            int i = ultMov;
             if (dlb.get(i % dlb.size()) == false) {
-                improve_flag = false;
+                flagMejora = false;
                 int contJ = dlb.size() - 1;
-                for (int j = i + 1 % dlb.size(); contJ > 0 && improve_flag == false; j++) {
+                for (int j = ((i + 1) % dlb.size()); contJ > 0 && flagMejora == false; j++) {
                     if (i % dlb.size() != j) {
                         if (checkMove(i % dlb.size(), j % dlb.size())) {
-                            applyMove(i % dlb.size(), j % dlb.size(), greedyA);
-                            cam++;
+                            applyMove(i % dlb.size(), j % dlb.size());
                             dlb.set(i % dlb.size(), false);
                             dlb.set(j % dlb.size(), false);
-                            improve_flag = true;
-                            fin = conjunto.get(j % dlb.size());
+                            flagMejora = true;
+                            ultMov = conjunto.get(j % dlb.size());
+                            cam++;
                         }
                     }
                     if (compruebaDLB(dlb)) {
@@ -62,19 +62,18 @@ public class AlgPMDLBit_Clase3_Grupo9 {
                     }
                     contJ--;
                 }
-                if (improve_flag == false) {
+               
+                if (flagMejora == false) {
                     dlb.set(i % dlb.size(), true);
                 }
-
-            } else {
-                fin++;
-                if (fin >= 20) {
-                    fin = 0;
-                }
+            } 
+            if (compruebaDLB(dlb)) {
+                dlbCompleto = true;
             }
+            ultMov = (ultMov+1) % conjunto.size();
             k++;
         }
-        System.out.println("es.ujaen.meta.AlgPMDLBit_Clase3_Grupo9.calculaPrimeroElMejor(): " + cam);
+        System.out.println("ITERACIONES BUENAS: " + cam);
         mejorCoste = greedyA.calculaCosteConjunto(conjunto, archivo.getMatriz1(), archivo.getMatriz2());
         muestraDatos();
     }
@@ -98,39 +97,27 @@ public class AlgPMDLBit_Clase3_Grupo9 {
     }
 
     // Comprueba si el movimiento mejora
-    private boolean checkMove(int posI, int posJ) {
-
-        int sum = 0;
-        int posR = conjunto.get(posI);
-        int posS = conjunto.get(posJ);
-        
+    private boolean checkMove(int r, int s) {
         int matrizF[][] = archivo.getMatriz1();
         int matrizD[][] = archivo.getMatriz2();
+        int sum = 0;
 
-        for (int k = 0; k < conjunto.size(); k++) {
-            if (k != posR && k != posS) {
-                sum +=   (matrizF[posJ][k] * (matrizD[conjunto.get(posI)][conjunto.get(k)] - matrizD[conjunto.get(posJ)][conjunto.get(k)])
-                        + matrizF[posI][k] * (matrizD[conjunto.get(posJ)][conjunto.get(k)] - matrizD[conjunto.get(posI)][conjunto.get(k)])
-                        + matrizF[k][posJ] * (matrizD[conjunto.get(k)][conjunto.get(posI)] - matrizD[conjunto.get(k)][conjunto.get(posJ)])
-                        + matrizF[k][posI] * (matrizD[conjunto.get(k)][conjunto.get(posJ)] - matrizD[conjunto.get(k)][conjunto.get(posI)]));
+        for (int k = 0; k < matrizF.length; k++) {
+            if (k != r && k != s) {
+                sum +=   ((matrizF[s][k] * (matrizD[conjunto.get(r)][conjunto.get(k)] - matrizD[conjunto.get(s)][conjunto.get(k)]))
+                        + (matrizF[r][k] * (matrizD[conjunto.get(s)][conjunto.get(k)] - matrizD[conjunto.get(r)][conjunto.get(k)]))
+                        + (matrizF[k][s] * (matrizD[conjunto.get(k)][conjunto.get(r)] - matrizD[conjunto.get(k)][conjunto.get(s)]))
+                        + (matrizF[k][r] * (matrizD[conjunto.get(k)][conjunto.get(s)] - matrizD[conjunto.get(k)][conjunto.get(r)])));
             }
         }
-//        System.out.println("es.ujaen.meta.AlgPMDLBit_Clase3_Grupo9.checkMove() " + sum + " posI: " + posI + " posJ: " + posJ);
-        if (sum < 0) {
-//            System.out.println("Coste conjunto: " + costeConjuntoActual + " Coste auxConjunto: " + costeConjuntoMod);
-            return true;
-        } else {
-//            System.out.println("es.ujaen.meta.AlgPMDLBit_Clase3_Grupo9.checkMove(): " + sum);
-            return false;
-        }
+        return (sum < 0);
     }
 
     // Aplica el movimiento de mejora
-    private void applyMove(int posI, int posJ, AlgGRE_Clase3_Grupo9 greedy) {
-        int aux = conjunto.get(posI);
-        conjunto.set(posI, conjunto.get(posJ));
-        conjunto.set(posJ, aux);
-        mejorCoste = greedy.calculaCosteConjunto(conjunto, archivo.getMatriz1(), archivo.getMatriz2());
+    private void applyMove(int r, int s) {
+        int valorR = conjunto.get(r);
+        conjunto.set(r, conjunto.get(s));
+        conjunto.set(s, valorR);
     }
 
     public ArrayList<Integer> getConjuntos() {
