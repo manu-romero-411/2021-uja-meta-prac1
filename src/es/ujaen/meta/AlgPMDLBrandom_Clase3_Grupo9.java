@@ -19,7 +19,6 @@ public class AlgPMDLBrandom_Clase3_Grupo9 {
     private final Archivodedatos archivo;
     private final int iteraciones;
     private final Random random;
-    private int aleatorio;
 
     public AlgPMDLBrandom_Clase3_Grupo9(Archivodedatos archivo, int iteraciones, Random random) {
         this.conjunto = new ArrayList<>();
@@ -41,7 +40,7 @@ public class AlgPMDLBrandom_Clase3_Grupo9 {
         for (int i = 0; i < conjunto.size(); i++) {
             dlb.add(Boolean.FALSE);
         }
-        int ultMov = aleatorio = random.nextInt(dlb.size());
+        int ultMov = random.nextInt(dlb.size());
         System.out.println("El valor de inicio es: " + ultMov);
         boolean dlbCompleto = false;
         int cam = 0;

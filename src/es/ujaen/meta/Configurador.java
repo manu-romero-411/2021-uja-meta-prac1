@@ -17,17 +17,17 @@ import java.util.ArrayList;
 public class Configurador {
 
     private ArrayList<String> archivos;
-    private ArrayList<String> algoritmos;
     private ArrayList<Long> semillas;
+    private Float oscilacionEstrategica;
+    private Float iteracionesEstrategica;
     private Integer iteraciones;
-    private Integer maLonguitudLRC;
-    private Integer maMejoresUnidades;
+    private Integer LonguitudLRC;
+    private Integer candidatosGreedy;
     private Integer tamLista;
-    private String guardar;
+    private String salidaLog;
 
     public Configurador(String ruta) {
         archivos = new ArrayList<>();
-        algoritmos = new ArrayList<>();
         semillas = new ArrayList<>();
 
         String linea;
@@ -39,7 +39,6 @@ public class Configurador {
                 String[] split = linea.split("=");
                 switch (split[0]) {
                     case "Archivos":
-                        //archivos.add(split[1]);
                         String[] v = split[1].split(" ");
                         for (int i = 0; i < v.length; i++) {
                             archivos.add(v[i]);
@@ -47,40 +46,38 @@ public class Configurador {
                         break;
 
                     case "Semillas":
-                        //archivos.add(split[1]);
                         String[] vsemillas = split[1].split(" ");
                         for (int i = 0; i < vsemillas.length; i++) {
                             semillas.add(Long.parseLong(vsemillas[i]));
                         }
                         break;
 
-                    case "Algoritmos":
-                        //archivos.add(split[1]);
-                        String[] valgoritmos = split[1].split(" ");
-                        for (int i = 0; i < valgoritmos.length; i++) {
-                            algoritmos.add(valgoritmos[i]);
-                        }
+                    case "MA-LonguitudLRC":
+                        LonguitudLRC = Integer.parseInt(split[1]);
                         break;
 
-                    case "MA-LonguitudLRC":
-                        maLonguitudLRC = Integer.parseInt(split[1]);
+                    case "MA-CandidatosGreedy":
+                        candidatosGreedy = Integer.parseInt(split[1]);
                         break;
-                        
-                    case "MA-MejoresUnidades":
-                        maMejoresUnidades = Integer.parseInt(split[1]);
-                        break;
-                        
-                    case "MA-TamLista":
+
+                    case "MA-TamListaTabu":
                         tamLista = Integer.parseInt(split[1]);
                         break;
-                        
-                        
+
+                    case "MA-OscilacionEstrategica":
+                        oscilacionEstrategica = Float.parseFloat(split[1]);
+                        break;
+
+                    case "MA-IteracionesOscilacion":
+                        iteracionesEstrategica = Float.parseFloat(split[1]);
+                        break;
+
                     case "Iteraciones":
                         iteraciones = Integer.parseInt(split[1]);
                         break;
 
-                    case "Guardar":
-                        guardar = split[1];
+                    case "SalidaLog":
+                        salidaLog = split[1];
                         break;
                 }
             }
@@ -94,20 +91,8 @@ public class Configurador {
         return archivos;
     }
 
-    public ArrayList<String> getAlgoritmos() {
-        return algoritmos;
-    }
-
     public ArrayList<Long> getSemillas() {
         return semillas;
-    }
-
-    public Integer getMaLonguitudLRC() {
-        return maLonguitudLRC;
-    }
-
-    public Integer getMaMejoresUnidades() {
-        return maMejoresUnidades;
     }
 
     public Integer getTamLista() {
@@ -118,8 +103,23 @@ public class Configurador {
         return iteraciones;
     }
 
-    public String getGuardar() {
-        return guardar;
+    public String getSalidaLog() {
+        return salidaLog;
     }
 
+    public Integer getCandidatosGreedy() {
+        return candidatosGreedy;
+    }
+
+    public Float getIteracionesEstrategica() {
+        return iteracionesEstrategica;
+    }
+
+    public Integer getLonguitudLRC() {
+        return LonguitudLRC;
+    }
+
+    public Float getOscilacionEstrategica() {
+        return oscilacionEstrategica;
+    }
 }

@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Random;
-import javafx.util.Pair;
 
 /**
  *
@@ -24,7 +23,7 @@ public class prac1 {
     public static void main(String[] args) {
         Configurador config = new Configurador(args[0]);
         ArrayList<Archivodedatos> arrayA = new ArrayList<>();
-        Log log = new Log(config.getGuardar());
+        Log log = new Log(config.getSalidaLog());
         Random random = new Random(config.getSemillas().get(0));
         System.out.println(config.getArchivos());
 
@@ -58,7 +57,7 @@ public class prac1 {
         System.out.println("");
         System.out.println("MULTIARRANQUE");
         for (int i = 0; i < arrayA.size(); i++) {
-            AlgMA_Clase3_Grupo9 multiA = new AlgMA_Clase3_Grupo9(arrayA.get(i), config.getMaLonguitudLRC(), config.getMaMejoresUnidades(), config.getTamLista(), random);
+            AlgMA_Clase3_Grupo9 multiA = new AlgMA_Clase3_Grupo9(arrayA.get(i), config.getLonguitudLRC(), config.getCandidatosGreedy(), config.getTamLista(), random);
             multiA.calculaMultiarranque();
         }
 
