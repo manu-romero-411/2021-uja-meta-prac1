@@ -87,6 +87,22 @@ public class AlgMA_Clase3_Grupo9 {
         System.out.println();
     }
 
+    private boolean factorizacion(int r, int s) {
+        int matrizF[][] = archivo.getMatriz1();
+        int matrizD[][] = archivo.getMatriz2();
+        int sum = 0;
+
+        for (int k = 0; k < matrizF.length; k++) {
+            if (k != r && k != s) {
+                sum += ((matrizF[s][k] * (matrizD[conjunto.get(r)][conjunto.get(k)] - matrizD[conjunto.get(s)][conjunto.get(k)]))
+                        + (matrizF[r][k] * (matrizD[conjunto.get(s)][conjunto.get(k)] - matrizD[conjunto.get(r)][conjunto.get(k)]))
+                        + (matrizF[k][s] * (matrizD[conjunto.get(k)][conjunto.get(r)] - matrizD[conjunto.get(k)][conjunto.get(s)]))
+                        + (matrizF[k][r] * (matrizD[conjunto.get(k)][conjunto.get(s)] - matrizD[conjunto.get(k)][conjunto.get(r)])));
+            }
+        }
+        return (sum < 0);
+    }
+
     private void anadirElementoTabu(Pair<Integer, Integer> elemento) {
         if (listaTabu.size() - 1 == tamLista) {
             for (int i = 0; i < tamLista - 1; i++) {

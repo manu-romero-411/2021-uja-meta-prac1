@@ -17,12 +17,16 @@ public class AlgPMDLBit_Clase3_Grupo9 {
     private int mejorCoste;
     private final Archivodedatos archivo;
     private final int iteraciones;
+    private final ArrayList<Boolean> dlb;
+    private boolean flagMejora;
 
     public AlgPMDLBit_Clase3_Grupo9(Archivodedatos archivo, int iteraciones) {
         this.conjunto = new ArrayList<>();
         this.mejorCoste = 0;
         this.archivo = archivo;
         this.iteraciones = iteraciones;
+        this.dlb = new ArrayList<>();
+        this.flagMejora = true;
     }
 
     // Calcula el primero el mejor iterativo
@@ -32,11 +36,15 @@ public class AlgPMDLBit_Clase3_Grupo9 {
         this.conjunto = greedyA.getConjunto();
         this.mejorCoste = greedyA.getCosteConjunto();
         System.out.println("El mejor coste de " + archivo.getNombre() + " es: " + mejorCoste);
-        boolean flagMejora = true;
-        ArrayList<Boolean> dlb = new ArrayList<>();
         for (int i = 0; i < conjunto.size(); i++) {
             dlb.add(false);
         }
+        mejora();
+        mejorCoste = greedyA.calculaCosteConjunto(conjunto, archivo.getMatriz1(), archivo.getMatriz2());
+        muestraDatos();
+    }
+
+    private void mejora() {
         boolean dlbCompleto = false;
         int ultMov = 0;
         int cam = 0;
@@ -59,20 +67,18 @@ public class AlgPMDLBit_Clase3_Grupo9 {
                     }
                     contJ--;
                 }
-               
+
                 if (flagMejora == false) {
                     dlb.set(i % dlb.size(), true);
                 }
-            } 
+            }
             if (compruebaDLB(dlb)) {
                 dlbCompleto = true;
             }
-            ultMov = (ultMov+1) % conjunto.size();
+            ultMov = (ultMov + 1) % conjunto.size();
             k++;
         }
         System.out.println("ITERACIONES BUENAS: " + cam);
-        mejorCoste = greedyA.calculaCosteConjunto(conjunto, archivo.getMatriz1(), archivo.getMatriz2());
-        muestraDatos();
     }
 
     private boolean compruebaDLB(ArrayList<Boolean> dlb) {
@@ -101,7 +107,7 @@ public class AlgPMDLBit_Clase3_Grupo9 {
 
         for (int k = 0; k < matrizF.length; k++) {
             if (k != r && k != s) {
-                sum +=   ((matrizF[s][k] * (matrizD[conjunto.get(r)][conjunto.get(k)] - matrizD[conjunto.get(s)][conjunto.get(k)]))
+                sum += ((matrizF[s][k] * (matrizD[conjunto.get(r)][conjunto.get(k)] - matrizD[conjunto.get(s)][conjunto.get(k)]))
                         + (matrizF[r][k] * (matrizD[conjunto.get(s)][conjunto.get(k)] - matrizD[conjunto.get(r)][conjunto.get(k)]))
                         + (matrizF[k][s] * (matrizD[conjunto.get(k)][conjunto.get(r)] - matrizD[conjunto.get(k)][conjunto.get(s)]))
                         + (matrizF[k][r] * (matrizD[conjunto.get(k)][conjunto.get(s)] - matrizD[conjunto.get(k)][conjunto.get(r)])));
