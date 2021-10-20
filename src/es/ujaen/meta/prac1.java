@@ -60,10 +60,6 @@ public class prac1 {
         for (int i = 0; i < arrayA.size(); i++) {
             AlgMA_Clase3_Grupo9 multiA = new AlgMA_Clase3_Grupo9(arrayA.get(i), config.getMaLonguitudLRC(), config.getMaMejoresUnidades(), config.getTamLista(), random);
             multiA.calculaMultiarranque();
-            ArrayList<Pair<Integer, Integer>> aux= multiA.getLRC();
-            for (int j = 0; j < aux.size(); j++) {
-                System.out.println("A: " + aux.get(i).getKey()+ " B: " + aux.get(i).getValue());
-            }
         }
 
         log.guardaLog();

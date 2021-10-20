@@ -11,10 +11,13 @@ import java.time.Clock;
  *
  * @author Manuel
  */
+enum type_timer {
+    REAL, VIRTUAL
+};
 
-enum type_timer {REAL, VIRTUAL};
-public class Timer {
-    private long start_time=System.nanoTime();
+public class timer {
+
+    private long start_time = System.nanoTime();
     private double elapsed;
     private Clock clock = Clock.systemDefaultZone();
     private int CLOCKS_PER_SEC = 1000000;
@@ -26,21 +29,20 @@ public class Timer {
       INPUT:          none
       OUTPUT:         none
       (SIDE)EFFECTS:  virtual and real time are computed   
-    */
-    public void start_timers(){
+     */
+    public void start_timers() {
         start_time = clock.millis();
     }
 
-    
     //TIMER_TYPE type; 
     /*    
           FUNCTION:       return the time used in seconds (virtual or real, depending on type) 
           INPUT:          none
           OUTPUT:         seconds since last call to start_timers
           (SIDE)EFFECTS:  none
-    */
-    public double elapsed_time(){
-        elapsed = clock.millis() - (start_time/1000);
+     */
+    public double elapsed_time() {
+        elapsed = clock.millis() - (start_time / 1000);
         return elapsed / CLOCKS_PER_SEC;
     }
 }

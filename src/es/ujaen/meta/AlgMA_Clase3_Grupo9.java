@@ -16,7 +16,7 @@ import javafx.util.Pair;
 public class AlgMA_Clase3_Grupo9 {
 
     private ArrayList<Integer> conjunto;
-    private int costeGreedy;
+    private int coste;
     private final Archivodedatos archivo;
     private int mejoresUnidades;
     private int tamLista;
@@ -33,7 +33,7 @@ public class AlgMA_Clase3_Grupo9 {
         this.mejoresUnidades = mejoresUnidades;
         this.tamLista = tamLista;
         this.random = random;
-        this.costeGreedy = 0;
+        this.coste = 0;
         this.conjunto = new ArrayList<>();
         this.LRC = new ArrayList<>();
         this.mayorDistancia = new ArrayList<>();
@@ -43,13 +43,26 @@ public class AlgMA_Clase3_Grupo9 {
 
     // Calcula el multiarranque
     public void calculaMultiarranque() {
-        AlgGRE_Clase3_Grupo9 greedy = new AlgGRE_Clase3_Grupo9(archivo);
+        creaLRC();
 
-        // PRIMERO GENERAMOS LAS N SOLUCIONES GREEDY (SE LO DAREMOS POR PARÁMETRO)
+        for (int i = 0; i < longitudLRC; i++) {
+            Pair<Integer, Integer> aux = LRC.get(i);
+            hazMultiArranque(aux);
+        }
+
+    }
+
+    private void hazMultiArranque(Pair<Integer, Integer> par) {
+        ArrayList<Integer> auxConjunto = conjunto;
+
+    }
+
+    private void creaLRC() {
+        AlgGRE_Clase3_Grupo9 greedy = new AlgGRE_Clase3_Grupo9(archivo);
         for (int i = 0; i < longitudLRC; i++) {
             greedy.calculaGreedy();
             conjunto = greedy.getConjunto();
-            costeGreedy = greedy.getCosteConjunto();
+            coste = greedy.getCosteConjunto();
             ArrayList<Integer> arrayAuxFlujos = AlgGRE_Clase3_Grupo9.sumaFilas(archivo.getMatriz1());
             arrayAuxFlujos.sort((o1, o2) -> o1.compareTo(o2));
             ArrayList<Integer> arrayAuxDist = AlgGRE_Clase3_Grupo9.sumaFilas(archivo.getMatriz2());
@@ -58,36 +71,19 @@ public class AlgMA_Clase3_Grupo9 {
                 mayorFlujo.add(arrayAuxFlujos.get(j));
                 mayorDistancia.add(arrayAuxDist.get(j));
             }
-            for (int j = 0; j < mejoresUnidades; j++) {
-                Pair<Integer, Integer> aux = new Pair<>(mayorDistancia.get(j), mayorFlujo.get(j));
-                anadirElementoLRC(aux);
-            }
+            int flujo = random.nextInt(mejoresUnidades);
+            int distancia = random.nextInt(mejoresUnidades);
+            LRC.add(new Pair<>(mayorDistancia.get(flujo), mayorFlujo.get(distancia)));
         }
-
-        for (int i = 0; i < longitudLRC; i++) {
-            Pair<Integer, Integer> aux = LRC.get(i);
-        }
-        
     }
 
     // Muestra los datos (futuro log)
     private void muestraDatos() {
-        System.out.println("El conjunto de archivos de datos " + archivo.getNombre() + " tiene un coste de " + costeGreedy + " y es el siguiente: ");
+        System.out.println("El conjunto de archivos de datos " + archivo.getNombre() + " tiene un coste de " + coste + " y es el siguiente: ");
         for (int i = 0; i < conjunto.size(); i++) {
             System.out.print(conjunto.get(i) + "  ");
         }
         System.out.println();
-    }
-
-    private void anadirElementoLRC(Pair<Integer, Integer> elemento) {
-        if (LRC.size() - 1 == longitudLRC) {
-            for (int i = 0; i < longitudLRC - 1; i++) {
-                LRC.set(i, LRC.get(i + 1));
-            }
-            LRC.set(longitudLRC, elemento);
-        } else {
-            LRC.add(elemento);
-        }
     }
 
     private void anadirElementoTabu(Pair<Integer, Integer> elemento) {
@@ -113,5 +109,4 @@ public class AlgMA_Clase3_Grupo9 {
         return LRC;
     }
 
-    
 }
