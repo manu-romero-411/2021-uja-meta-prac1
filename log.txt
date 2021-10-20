@@ -1,0 +1,1 @@
+El conjunto de archivos de datos ford01 tiene un coste de 3941 y es el siguiente: El conjunto de archivos de datos ford02 tiene un coste de 33954 y es el siguiente: El conjunto de archivos de datos ford03 tiene un coste de 13806 y es el siguiente: El conjunto de archivos de datos ford04 tiene un coste de 191745 y es el siguiente: 
