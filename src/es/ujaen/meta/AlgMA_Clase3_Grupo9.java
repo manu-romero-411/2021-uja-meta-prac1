@@ -14,7 +14,7 @@ import javafx.util.Pair;
  * @author admin
  */
 public class AlgMA_Clase3_Grupo9 {
-
+    
     private ArrayList<Integer> conjunto;
     private int coste;
     private final Archivodedatos archivo;
@@ -26,8 +26,9 @@ public class AlgMA_Clase3_Grupo9 {
     private ArrayList<ArrayList<Integer>> memLargoPlazo;
     private ArrayList<Integer> mayorFlujo;
     private ArrayList<Integer> mayorDistancia;
+    private ArrayList<Boolean> DLB;
     private int longitudLRC;
-
+    
     public AlgMA_Clase3_Grupo9(Archivodedatos archivo, int longitudLRC, int mejoresUnidades, int tamLista, Random random) {
         this.archivo = archivo;
         this.longitudLRC = longitudLRC;
@@ -41,23 +42,34 @@ public class AlgMA_Clase3_Grupo9 {
         this.mayorDistancia = new ArrayList<>();
         this.mayorFlujo = new ArrayList<>();
         this.listaTabu = new ArrayList<>();
+        this.DLB = new ArrayList<>();
     }
 
     // Calcula el multiarranque
     public void calculaMultiarranque() {
         creaLRC();
-
+        
         for (int i = 0; i < longitudLRC; i++) {
             Pair<Integer, Integer> aux = LRC.get(i);
             hazMultiArranque(aux);
         }
-
+        
     }
-
+    
     private void hazMultiArranque(Pair<Integer, Integer> par) {
         ArrayList<Integer> auxConjunto = conjunto;
+        cambiaConjunto(par, auxConjunto);
+        
     }
-
+    
+    private void cambiaConjunto(Pair<Integer, Integer> par, ArrayList<Integer> conjuntoAux) {
+        int vAux = conjuntoAux.get(par.getKey());
+        conjuntoAux.set(par.getKey(), par.getValue());
+        conjuntoAux.set(par.getValue(), vAux);
+        anadirElementoTabu(par);
+        incrementaLargoPlazo(par);
+    }
+    
     private void creaLRC() {
         AlgGRE_Clase3_Grupo9 greedy = new AlgGRE_Clase3_Grupo9(archivo);
         for (int i = 0; i < longitudLRC; i++) {
@@ -86,12 +98,12 @@ public class AlgMA_Clase3_Grupo9 {
         }
         System.out.println();
     }
-
+    
     private boolean factorizacion(int r, int s) {
         int matrizF[][] = archivo.getMatriz1();
         int matrizD[][] = archivo.getMatriz2();
         int sum = 0;
-
+        
         for (int k = 0; k < matrizF.length; k++) {
             if (k != r && k != s) {
                 sum += ((matrizF[s][k] * (matrizD[conjunto.get(r)][conjunto.get(k)] - matrizD[conjunto.get(s)][conjunto.get(k)]))
@@ -102,7 +114,7 @@ public class AlgMA_Clase3_Grupo9 {
         }
         return (sum < 0);
     }
-
+    
     private void anadirElementoTabu(Pair<Integer, Integer> elemento) {
         if (listaTabu.size() - 1 == tamLista) {
             for (int i = 0; i < tamLista - 1; i++) {
@@ -113,23 +125,23 @@ public class AlgMA_Clase3_Grupo9 {
             listaTabu.add(elemento);
         }
     }
-
-    private void incrementaLargoPlazo(int posI, int posJ) {
-        int aux = memLargoPlazo.get(posI).get(posJ);
+    
+    private void incrementaLargoPlazo(Pair<Integer, Integer> elemento) {
+        int aux = memLargoPlazo.get(elemento.getKey()).get(elemento.getValue());
         aux++;
-        memLargoPlazo.get(posI).set(posJ, aux);
+        memLargoPlazo.get(elemento.getKey()).set(elemento.getValue(), aux);
     }
-
+    
     public ArrayList<Integer> getMayorDistancia() {
         return mayorDistancia;
     }
-
+    
     public ArrayList<Integer> getConjuntos() {
         return conjunto;
     }
-
+    
     public ArrayList<Pair<Integer, Integer>> getLRC() {
         return LRC;
     }
-
+    
 }
