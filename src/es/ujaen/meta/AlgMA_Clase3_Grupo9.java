@@ -14,10 +14,11 @@ import javafx.util.Pair;
  * @author admin
  */
 public class AlgMA_Clase3_Grupo9 {
-    
+
     private ArrayList<Integer> conjunto;
     private int coste;
     private final Archivodedatos archivo;
+    private final int iteraciones;
     private final int candidatosGreedy;
     private final int tamLista;
     private Random random;
@@ -26,11 +27,13 @@ public class AlgMA_Clase3_Grupo9 {
     private ArrayList<ArrayList<Integer>> memLargoPlazo;
     private ArrayList<Integer> mayorFlujo;
     private ArrayList<Integer> mayorDistancia;
-    private ArrayList<Boolean> DLB;
+    private ArrayList<Boolean> dlb;
     private int longitudLRC;
-    
-    public AlgMA_Clase3_Grupo9(Archivodedatos archivo, int longitudLRC, int mejoresUnidades, int tamLista, Random random) {
+    private boolean flagMejora;
+
+    public AlgMA_Clase3_Grupo9(Archivodedatos archivo, int iteraciones, int longitudLRC, int mejoresUnidades, int tamLista, Random random) {
         this.archivo = archivo;
+        this.iteraciones = iteraciones;
         this.longitudLRC = longitudLRC;
         this.candidatosGreedy = mejoresUnidades;
         this.tamLista = tamLista;
@@ -42,26 +45,95 @@ public class AlgMA_Clase3_Grupo9 {
         this.mayorDistancia = new ArrayList<>();
         this.mayorFlujo = new ArrayList<>();
         this.listaTabu = new ArrayList<>();
-        this.DLB = new ArrayList<>();
+        this.dlb = new ArrayList<>();
+        this.flagMejora = true;
     }
 
     // Calcula el multiarranque
     public void calculaMultiarranque() {
         creaLRC();
-        
+
         for (int i = 0; i < longitudLRC; i++) {
             Pair<Integer, Integer> aux = LRC.get(i);
             hazMultiArranque(aux);
         }
-        
+
     }
-    
+
     private void hazMultiArranque(Pair<Integer, Integer> par) {
         ArrayList<Integer> auxConjunto = conjunto;
         cambiaConjunto(par, auxConjunto);
-        
+
+        boolean dlbCompleto = false;
+        int ultMov = 0;
+        int cam = 0;
+        int k = 0;
+        while (k < iteraciones && !dlbCompleto) {
+            int i = ultMov;
+            if (dlb.get(i % dlb.size()) == false) {
+                flagMejora = false;
+                int contJ = dlb.size() - 1;
+                for (int j = ((i + 1) % dlb.size()); contJ > 0 && flagMejora == false; j++) {
+                    if (i % dlb.size() != j) {
+                        if (checkMove(i % dlb.size(), j % dlb.size())) {
+                            applyMove(i % dlb.size(), j % dlb.size());
+                            dlb.set(i % dlb.size(), false);
+                            dlb.set(j % dlb.size(), false);
+                            flagMejora = true;
+                            ultMov = conjunto.get(j % dlb.size());
+                            cam++;
+                        }
+                    }
+                    contJ--;
+                }
+
+                if (flagMejora == false) {
+                    dlb.set(i % dlb.size(), true);
+                }
+            }
+            if (compruebaDLB()) {
+                dlbCompleto = true;
+            }
+            ultMov = (ultMov + 1) % conjunto.size();
+            k++;
+        }
+        System.out.println("ITERACIONES BUENAS: " + cam);
+
     }
     
+     private boolean checkMove(int r, int s) {
+        int matrizF[][] = archivo.getMatriz1();
+        int matrizD[][] = archivo.getMatriz2();
+        int sum = 0;
+
+        for (int k = 0; k < matrizF.length; k++) {
+            if (k != r && k != s) {
+                sum += ((matrizF[s][k] * (matrizD[conjunto.get(r)][conjunto.get(k)] - matrizD[conjunto.get(s)][conjunto.get(k)]))
+                        + (matrizF[r][k] * (matrizD[conjunto.get(s)][conjunto.get(k)] - matrizD[conjunto.get(r)][conjunto.get(k)]))
+                        + (matrizF[k][s] * (matrizD[conjunto.get(k)][conjunto.get(r)] - matrizD[conjunto.get(k)][conjunto.get(s)]))
+                        + (matrizF[k][r] * (matrizD[conjunto.get(k)][conjunto.get(s)] - matrizD[conjunto.get(k)][conjunto.get(r)])));
+            }
+        }
+        return (sum < 0);
+    }
+
+    // Aplica el movimiento de mejora
+    private void applyMove(int r, int s) {
+        int valorR = conjunto.get(r);
+        conjunto.set(r, conjunto.get(s));
+        conjunto.set(s, valorR);
+    }
+    
+    
+    private boolean compruebaDLB() {
+        for (int i = 0; i < dlb.size(); i++) {
+            if (!dlb.get(i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private void cambiaConjunto(Pair<Integer, Integer> par, ArrayList<Integer> conjuntoAux) {
         int vAux = conjuntoAux.get(par.getKey());
         conjuntoAux.set(par.getKey(), par.getValue());
@@ -69,7 +141,7 @@ public class AlgMA_Clase3_Grupo9 {
         anadirElementoTabu(par);
         incrementaLargoPlazo(par);
     }
-    
+
     private void creaLRC() {
         AlgGRE_Clase3_Grupo9 greedy = new AlgGRE_Clase3_Grupo9(archivo);
         for (int i = 0; i < longitudLRC; i++) {
@@ -98,12 +170,12 @@ public class AlgMA_Clase3_Grupo9 {
         }
         System.out.println();
     }
-    
+
     private boolean factorizacion(int r, int s) {
         int matrizF[][] = archivo.getMatriz1();
         int matrizD[][] = archivo.getMatriz2();
         int sum = 0;
-        
+
         for (int k = 0; k < matrizF.length; k++) {
             if (k != r && k != s) {
                 sum += ((matrizF[s][k] * (matrizD[conjunto.get(r)][conjunto.get(k)] - matrizD[conjunto.get(s)][conjunto.get(k)]))
@@ -114,7 +186,7 @@ public class AlgMA_Clase3_Grupo9 {
         }
         return (sum < 0);
     }
-    
+
     private void anadirElementoTabu(Pair<Integer, Integer> elemento) {
         if (listaTabu.size() - 1 == tamLista) {
             for (int i = 0; i < tamLista - 1; i++) {
@@ -125,23 +197,23 @@ public class AlgMA_Clase3_Grupo9 {
             listaTabu.add(elemento);
         }
     }
-    
+
     private void incrementaLargoPlazo(Pair<Integer, Integer> elemento) {
         int aux = memLargoPlazo.get(elemento.getKey()).get(elemento.getValue());
         aux++;
         memLargoPlazo.get(elemento.getKey()).set(elemento.getValue(), aux);
     }
-    
+
     public ArrayList<Integer> getMayorDistancia() {
         return mayorDistancia;
     }
-    
+
     public ArrayList<Integer> getConjuntos() {
         return conjunto;
     }
-    
+
     public ArrayList<Pair<Integer, Integer>> getLRC() {
         return LRC;
     }
-    
+
 }

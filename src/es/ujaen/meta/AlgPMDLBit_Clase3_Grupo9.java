@@ -72,7 +72,7 @@ public class AlgPMDLBit_Clase3_Grupo9 {
                     dlb.set(i % dlb.size(), true);
                 }
             }
-            if (compruebaDLB(dlb)) {
+            if (compruebaDLB()) {
                 dlbCompleto = true;
             }
             ultMov = (ultMov + 1) % conjunto.size();
@@ -81,7 +81,7 @@ public class AlgPMDLBit_Clase3_Grupo9 {
         System.out.println("ITERACIONES BUENAS: " + cam);
     }
 
-    private boolean compruebaDLB(ArrayList<Boolean> dlb) {
+    private boolean compruebaDLB() {
         for (int i = 0; i < dlb.size(); i++) {
             if (!dlb.get(i)) {
                 return false;

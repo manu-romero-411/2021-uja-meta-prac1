@@ -57,8 +57,8 @@ public class prac1 {
         System.out.println("");
         System.out.println("MULTIARRANQUE");
         for (int i = 0; i < arrayA.size(); i++) {
-            AlgMA_Clase3_Grupo9 multiA = new AlgMA_Clase3_Grupo9(arrayA.get(i), config.getLonguitudLRC(), config.getCandidatosGreedy(), config.getTamLista(), random);
-            multiA.calculaMultiarranque();
+            //AlgMA_Clase3_Grupo9 multiA = new AlgMA_Clase3_Grupo9(arrayA.get(i), config.getIteraciones(), config.getLonguitudLRC(), config.getCandidatosGreedy(), config.getTamLista(), random);
+            //multiA.calculaMultiarranque();
         }
 
         log.guardaLog();

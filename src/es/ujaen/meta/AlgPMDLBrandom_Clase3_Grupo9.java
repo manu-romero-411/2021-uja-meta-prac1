@@ -19,6 +19,8 @@ public class AlgPMDLBrandom_Clase3_Grupo9 {
     private final Archivodedatos archivo;
     private final int iteraciones;
     private final Random random;
+    private ArrayList<Boolean> dlb;
+    private boolean flagMejora;
 
     public AlgPMDLBrandom_Clase3_Grupo9(Archivodedatos archivo, int iteraciones, Random random) {
         this.conjunto = new ArrayList<>();
@@ -26,6 +28,8 @@ public class AlgPMDLBrandom_Clase3_Grupo9 {
         this.archivo = archivo;
         this.iteraciones = iteraciones;
         this.random = random;
+        this.dlb = new ArrayList<>();
+        this.flagMejora = true;
     }
 
     // Calcula el primero el mejor random
@@ -35,11 +39,15 @@ public class AlgPMDLBrandom_Clase3_Grupo9 {
         this.conjunto = greedyA.getConjunto();
         this.mejorCoste = greedyA.getCosteConjunto();
         System.out.println("El mejor coste de " + archivo.getNombre() + " es: " + mejorCoste);
-        boolean flagMejora = true;
-        ArrayList<Boolean> dlb = new ArrayList<>();
         for (int i = 0; i < conjunto.size(); i++) {
             dlb.add(Boolean.FALSE);
         }
+        mejora();
+        mejorCoste = greedyA.calculaCosteConjunto(conjunto, archivo.getMatriz1(), archivo.getMatriz2());
+        muestraDatos();
+    }
+
+    private void mejora() {
         int ultMov = random.nextInt(dlb.size());
         System.out.println("El valor de inicio es: " + ultMov);
         boolean dlbCompleto = false;
@@ -68,17 +76,14 @@ public class AlgPMDLBrandom_Clase3_Grupo9 {
                     dlb.set(i % dlb.size(), true);
                 }
             }
-            if (compruebaDLB(dlb)) {
+            if (compruebaDLB()) {
                 dlbCompleto = true;
             }
             ultMov = (ultMov + 1) % conjunto.size();
             k++;
         }
         System.out.println("es.ujaen.meta.AlgPMDLBrandom_Clase3_Grupo9.calculaPrimeroElMejor(): " + cam);
-        mejorCoste = greedyA.calculaCosteConjunto(conjunto, archivo.getMatriz1(), archivo.getMatriz2());
-        muestraDatos();
     }
-    // Muestra los datos (futuro log)
 
     private void muestraDatos() {
         System.out.println("El conjunto de archivos de datos " + archivo.getNombre() + " con semilla: " + " tiene un coste de " + mejorCoste + " y es el siguiente: ");
@@ -112,7 +117,7 @@ public class AlgPMDLBrandom_Clase3_Grupo9 {
         conjunto.set(s, valorR);
     }
 
-    private boolean compruebaDLB(ArrayList<Boolean> dlb) {
+    private boolean compruebaDLB() {
         for (int i = 0; i < dlb.size(); i++) {
             if (!dlb.get(i)) {
                 return false;
