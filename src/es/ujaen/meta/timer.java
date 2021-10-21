@@ -15,7 +15,7 @@ enum type_timer {
     REAL, VIRTUAL
 };
 
-public class timer {
+public class Timer {
 
     private long start_time = System.nanoTime();
     private double elapsed;

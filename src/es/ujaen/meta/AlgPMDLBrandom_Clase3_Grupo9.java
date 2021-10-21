@@ -14,6 +14,8 @@ import java.util.Random;
  */
 public class AlgPMDLBrandom_Clase3_Grupo9 {
 
+    private final long inicio;
+    private long fin;
     private ArrayList<Integer> conjunto;
     private int mejorCoste;
     private final Archivodedatos archivo;
@@ -30,6 +32,7 @@ public class AlgPMDLBrandom_Clase3_Grupo9 {
         this.random = random;
         this.dlb = new ArrayList<>();
         this.flagMejora = true;
+        this.inicio = System.currentTimeMillis();
     }
 
     // Calcula el primero el mejor random
@@ -44,7 +47,7 @@ public class AlgPMDLBrandom_Clase3_Grupo9 {
         }
         mejora();
         mejorCoste = greedyA.calculaCosteConjunto(conjunto, archivo.getMatriz1(), archivo.getMatriz2());
-        muestraDatos();
+        //muestraDatos();
     }
 
     private void mejora() {
@@ -85,12 +88,15 @@ public class AlgPMDLBrandom_Clase3_Grupo9 {
         System.out.println("es.ujaen.meta.AlgPMDLBrandom_Clase3_Grupo9.calculaPrimeroElMejor(): " + cam);
     }
 
-    private void muestraDatos() {
-        System.out.println("El conjunto de archivos de datos " + archivo.getNombre() + " con semilla: " + " tiene un coste de " + mejorCoste + " y es el siguiente: ");
+    public String muestraDatos() {
+        fin = System.currentTimeMillis();
+        String aux = new String();
         for (int i = 0; i < conjunto.size(); i++) {
-            System.out.print(conjunto.get(i) + "  ");
+            aux += conjunto.get(i) + "  ";
         }
         System.out.println();
+        return "PRIMERO EL MEJOR RANDOM \nEl conjunto de archivos de datos " + archivo.getNombre() + " tiene un coste de " + mejorCoste
+                + " con un tiempo de ejecucion de: " + (fin - inicio) + " milisegundos y es el siguiente: \n" + aux + "\n";
     }
 
     // Comprueba si el movimiento mejora

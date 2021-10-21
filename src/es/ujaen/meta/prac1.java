@@ -37,21 +37,28 @@ public class prac1 {
         for (int i = 0; i < arrayA.size(); i++) {
             AlgGRE_Clase3_Grupo9 greedy = new AlgGRE_Clase3_Grupo9(arrayA.get(i));
             greedy.calculaGreedy();
+            System.out.print(greedy.muestraDatos());
             log.addTexto(greedy.muestraDatos());
         }
 
         System.out.println("");
+        log.addTexto("\n");
         System.out.println("PRIMERO EL MEJOR IT");
         for (int i = 0; i < arrayA.size(); i++) {
             AlgPMDLBit_Clase3_Grupo9 primero = new AlgPMDLBit_Clase3_Grupo9(arrayA.get(i), config.getIteraciones());
             primero.calculaPrimeroElMejor();
+            System.out.print(primero.muestraDatos());
+            log.addTexto(primero.muestraDatos());
         }
 
         System.out.println("");
+        log.addTexto("\n");
         System.out.println("PRIMERO EL MEJOR RAN");
         for (int i = 0; i < arrayA.size(); i++) {
             AlgPMDLBrandom_Clase3_Grupo9 primeroAle = new AlgPMDLBrandom_Clase3_Grupo9(arrayA.get(i), config.getIteraciones(), random);
             primeroAle.calculaPrimeroElMejor();
+            System.out.print(primeroAle.muestraDatos());
+            log.addTexto(primeroAle.muestraDatos());
         }
 
         System.out.println("");
