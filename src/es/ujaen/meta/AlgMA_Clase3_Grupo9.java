@@ -93,7 +93,7 @@ public class AlgMA_Clase3_Grupo9 {
                         } else {
                             sinCambiosIt++;
                             if (sinCambiosIt == (int) iteraciones * iteracionesOscilacion) {
-                                resetDLB();
+                                //Esperar aqui cosas
                             }
                         }
                     }
@@ -106,6 +106,8 @@ public class AlgMA_Clase3_Grupo9 {
             }
             if (compruebaDLB()) {
                 dlbCompleto = true;
+                resetDLB();
+                oscilacionEstrategica();
             }
             ultMov = (ultMov + 1) % conjunto.size();
             k++;
@@ -123,6 +125,10 @@ public class AlgMA_Clase3_Grupo9 {
         for (int i = 0; i < conjunto.size(); i++) {
             dlb.set(i, false);
         }
+    }
+
+    private void oscilacionEstrategica() {
+
     }
 
     private void iniciaLargoPlazo() {
