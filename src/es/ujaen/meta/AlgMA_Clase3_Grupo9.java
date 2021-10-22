@@ -93,7 +93,7 @@ public class AlgMA_Clase3_Grupo9 {
                         } else {
                             sinCambiosIt++;
                             if (sinCambiosIt == (int) iteraciones * iteracionesOscilacion) {
-                                //Esperar aqui cosas
+                                oscilacionEstrategica();
                             }
                         }
                     }
@@ -107,7 +107,6 @@ public class AlgMA_Clase3_Grupo9 {
             if (compruebaDLB()) {
                 dlbCompleto = true;
                 resetDLB();
-                oscilacionEstrategica();
             }
             ultMov = (ultMov + 1) % conjunto.size();
             k++;
@@ -128,6 +127,8 @@ public class AlgMA_Clase3_Grupo9 {
     }
 
     private void oscilacionEstrategica() {
+        int aleatorio = random.nextInt(3);
+        Pair<Integer, Integer> aux = listaTabu.get(aleatorio);
 
     }
 
