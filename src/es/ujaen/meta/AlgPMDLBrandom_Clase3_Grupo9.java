@@ -62,7 +62,7 @@ public class AlgPMDLBrandom_Clase3_Grupo9 {
                 flagMejora = false;
                 int contJ = dlb.size() - 1;
                 for (int j = ((i + 1) % dlb.size()); contJ > 0 && flagMejora == false; j++) {
-                    if (i % dlb.size() != j) {
+                    if (i % dlb.size() != j % dlb.size()) {
                         if (checkMove(i % dlb.size(), j % dlb.size())) {
                             applyMove(i % dlb.size(), j % dlb.size());
                             dlb.set(i % dlb.size(), false);
