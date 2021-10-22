@@ -62,7 +62,7 @@ public class AlgMA_Clase3_Grupo9 {
         iniciaDLB();
         for (int i = 0; i < longitudLRC; i++) {
             Pair<Integer, Integer> aux = LRC.get(i);
-
+            System.out.println("Vez: " + i);
             hazMultiArranque(aux);
         }
 
@@ -94,6 +94,7 @@ public class AlgMA_Clase3_Grupo9 {
                             sinCambiosIt++;
                             if (sinCambiosIt == (int) iteraciones * iteracionesOscilacion) {
                                 oscilacionEstrategica(auxConjunto);
+                                System.out.println("K: " + k);
                             }
                         }
                     }
@@ -107,11 +108,11 @@ public class AlgMA_Clase3_Grupo9 {
             if (compruebaDLB()) {
                 dlbCompleto = true;
                 resetDLB();
+                System.out.println("K2: " + k);
             }
             ultMov = (ultMov + 1) % conjunto.size();
             k++;
         }
-
     }
 
     private void iniciaDLB() {
