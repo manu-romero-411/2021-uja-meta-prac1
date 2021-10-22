@@ -93,7 +93,7 @@ public class AlgMA_Clase3_Grupo9 {
                         } else {
                             sinCambiosIt++;
                             if (sinCambiosIt == (int) iteraciones * iteracionesOscilacion) {
-                                oscilacionEstrategica();
+                                oscilacionEstrategica(auxConjunto);
                             }
                         }
                     }
@@ -126,10 +126,12 @@ public class AlgMA_Clase3_Grupo9 {
         }
     }
 
-    private void oscilacionEstrategica() {
+    private void oscilacionEstrategica(ArrayList<Integer> conjuntoAux) {
         int aleatorio = random.nextInt(3);
         Pair<Integer, Integer> aux = listaTabu.get(aleatorio);
-
+        int auxC = conjuntoAux.get(aux.fst);
+        conjuntoAux.set(aux.fst, aux.snd);
+        conjuntoAux.set(aux.snd, auxC);
     }
 
     private void iniciaLargoPlazo() {
