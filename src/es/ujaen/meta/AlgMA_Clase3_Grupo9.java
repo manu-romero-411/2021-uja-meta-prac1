@@ -17,6 +17,7 @@ import javafx.util.Pair;
 public class AlgMA_Clase3_Grupo9 {
 
     private final long inicio;
+    private ArrayList<Pair<Integer, Integer>> listaTabu;
     private long fin;
     private ArrayList<Integer> conjunto;
     private int coste;
@@ -27,7 +28,6 @@ public class AlgMA_Clase3_Grupo9 {
     private final float iteracionesOscilacion;
     private Random random;
     private ArrayList<Pair<Integer, Integer>> LRC;
-    private ArrayList<Pair<Integer, Integer>> listaTabu;
     private ArrayList<ArrayList<Integer>> memLargoPlazo;
     private ArrayList<Integer> mayorFlujo;
     private ArrayList<Integer> mayorDistancia;
@@ -107,11 +107,17 @@ public class AlgMA_Clase3_Grupo9 {
             }
             if (compruebaDLB()) {
                 dlbCompleto = true;
-                resetDLB();
                 System.out.println("K2: " + k);
             }
             ultMov = (ultMov + 1) % conjunto.size();
             k++;
+        }
+        muestraAuxConjunto(auxConjunto);
+    }
+
+    private void muestraAuxConjunto(ArrayList<Integer> auxConjunto) {
+        for (int i = 0; i < auxConjunto.size(); i++) {
+            System.out.print(auxConjunto.get(i) + " ");
         }
     }
 
@@ -231,13 +237,13 @@ public class AlgMA_Clase3_Grupo9 {
     }
 
     private void anadirElementoTabu(Pair<Integer, Integer> elemento) {
-        if (listaTabu.size() - 1 == tamLista) {
-            for (int i = 0; i < tamLista - 1; i++) {
-                listaTabu.set(i, listaTabu.get(i + 1));
-            }
-            listaTabu.set(tamLista, elemento);
-        } else {
+        if (listaTabu.size() < tamLista) {
             listaTabu.add(elemento);
+        } else {
+            for (int i = tamLista - 1; i > 0; i--) {
+                listaTabu.set(i, listaTabu.get(i - 1));
+            }
+            listaTabu.set(0, elemento);
         }
     }
 
