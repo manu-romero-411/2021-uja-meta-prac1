@@ -1,14 +1,11 @@
 Archivos=ford01.dat ford02.dat ford03.dat ford04.dat
 Semillas=77371841
 Algoritmos=Greedy
-<<<<<<< HEAD
-Iteraciones=2000
 Guardar=log
-MA-LongitudLRC=10
-=======
 Iteraciones=1000
-Guardar=log
+SalidaLog=log
+MA-OscilacionEstrategica=0.5
+MA-IteracionesOscilacion=0.05
 MA-LonguitudLRC=10
->>>>>>> adriDev
-MA-MejoresUnidades=5
-MA-TamLista=3
+MA-CandidatosGreedy=5
+MA-TamListaTabu=3

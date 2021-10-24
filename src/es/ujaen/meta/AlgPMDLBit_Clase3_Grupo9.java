@@ -13,16 +13,23 @@ import java.util.ArrayList;
  */
 public class AlgPMDLBit_Clase3_Grupo9 {
 
+    private final long inicio;
+    private long fin;
     private ArrayList<Integer> conjunto;
     private int mejorCoste;
     private final Archivodedatos archivo;
     private final int iteraciones;
+    private final ArrayList<Boolean> dlb;
+    private boolean flagMejora;
 
     public AlgPMDLBit_Clase3_Grupo9(Archivodedatos archivo, int iteraciones) {
         this.conjunto = new ArrayList<>();
         this.mejorCoste = 0;
         this.archivo = archivo;
         this.iteraciones = iteraciones;
+        this.dlb = new ArrayList<>();
+        this.flagMejora = true;
+        this.inicio = System.currentTimeMillis();
     }
 
     // Calcula el primero el mejor iterativo
@@ -32,11 +39,15 @@ public class AlgPMDLBit_Clase3_Grupo9 {
         this.conjunto = greedyA.getConjunto();
         this.mejorCoste = greedyA.getCosteConjunto();
         System.out.println("El mejor coste de " + archivo.getNombre() + " es: " + mejorCoste);
-        boolean flagMejora = true;
-        ArrayList<Boolean> dlb = new ArrayList<>();
         for (int i = 0; i < conjunto.size(); i++) {
             dlb.add(false);
         }
+        mejora();
+        mejorCoste = greedyA.calculaCosteConjunto(conjunto, archivo.getMatriz1(), archivo.getMatriz2());
+        //muestraDatos();
+    }
+
+    private void mejora() {
         boolean dlbCompleto = false;
         int ultMov = 0;
         int cam = 0;
@@ -47,7 +58,7 @@ public class AlgPMDLBit_Clase3_Grupo9 {
                 flagMejora = false;
                 int contJ = dlb.size() - 1;
                 for (int j = ((i + 1) % dlb.size()); contJ > 0 && flagMejora == false; j++) {
-                    if (i % dlb.size() != j) {
+                    if (i % dlb.size() != j % dlb.size())  {
                         if (checkMove(i % dlb.size(), j % dlb.size())) {
                             applyMove(i % dlb.size(), j % dlb.size());
                             dlb.set(i % dlb.size(), false);
@@ -62,23 +73,21 @@ public class AlgPMDLBit_Clase3_Grupo9 {
                     }
                     contJ--;
                 }
-               
+
                 if (flagMejora == false) {
                     dlb.set(i % dlb.size(), true);
                 }
-            } 
-            if (compruebaDLB(dlb)) {
+            }
+            if (compruebaDLB()) {
                 dlbCompleto = true;
             }
-            ultMov = (ultMov+1) % conjunto.size();
+            ultMov = (ultMov + 1) % conjunto.size();
             k++;
         }
         System.out.println("ITERACIONES BUENAS: " + cam);
-        mejorCoste = greedyA.calculaCosteConjunto(conjunto, archivo.getMatriz1(), archivo.getMatriz2());
-        muestraDatos();
     }
 
-    private boolean compruebaDLB(ArrayList<Boolean> dlb) {
+    private boolean compruebaDLB() {
         for (int i = 0; i < dlb.size(); i++) {
             if (!dlb.get(i)) {
                 return false;
@@ -88,12 +97,15 @@ public class AlgPMDLBit_Clase3_Grupo9 {
     }
 
     // Muestra los datos (futuro log)
-    private void muestraDatos() {
-        System.out.println("El conjunto de archivos de datos " + archivo.getNombre() + " tiene un coste de " + mejorCoste + " y es el siguiente: ");
+    public String muestraDatos() {
+        fin = System.currentTimeMillis();
+        String aux = new String();
         for (int i = 0; i < conjunto.size(); i++) {
-            System.out.print(conjunto.get(i) + "  ");
+            aux += conjunto.get(i) + "  ";
         }
         System.out.println();
+        return "PRIMERO EL MEJOR IT \nEl conjunto de archivos de datos " + archivo.getNombre() + " tiene un coste de " + mejorCoste
+                + " con un tiempo de ejecucion de: " + (fin - inicio) + " milisegundos y es el siguiente: \n" + aux + "\n";
     }
 
     // Comprueba si el movimiento mejora
@@ -104,7 +116,7 @@ public class AlgPMDLBit_Clase3_Grupo9 {
 
         for (int k = 0; k < matrizF.length; k++) {
             if (k != r && k != s) {
-                sum +=   ((matrizF[s][k] * (matrizD[conjunto.get(r)][conjunto.get(k)] - matrizD[conjunto.get(s)][conjunto.get(k)]))
+                sum += ((matrizF[s][k] * (matrizD[conjunto.get(r)][conjunto.get(k)] - matrizD[conjunto.get(s)][conjunto.get(k)]))
                         + (matrizF[r][k] * (matrizD[conjunto.get(s)][conjunto.get(k)] - matrizD[conjunto.get(r)][conjunto.get(k)]))
                         + (matrizF[k][s] * (matrizD[conjunto.get(k)][conjunto.get(r)] - matrizD[conjunto.get(k)][conjunto.get(s)]))
                         + (matrizF[k][r] * (matrizD[conjunto.get(k)][conjunto.get(s)] - matrizD[conjunto.get(k)][conjunto.get(r)])));

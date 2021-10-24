@@ -23,7 +23,7 @@ public class prac1 {
     public static void main(String[] args) {
         Configurador config = new Configurador(args[0]);
         ArrayList<Archivodedatos> arrayA = new ArrayList<>();
-        Log log = new Log(config.getGuardar());
+        Log log = new Log(config.getSalidaLog());
         Random random = new Random(config.getSemillas().get(0));
         System.out.println(config.getArchivos());
 
@@ -37,29 +37,39 @@ public class prac1 {
         for (int i = 0; i < arrayA.size(); i++) {
             AlgGRE_Clase3_Grupo9 greedy = new AlgGRE_Clase3_Grupo9(arrayA.get(i));
             greedy.calculaGreedy();
+            System.out.print(greedy.muestraDatos());
             log.addTexto(greedy.muestraDatos());
         }
 
         System.out.println("");
-        System.out.println("PRIMER MEJOR ITERATIVO");
+        log.addTexto("\n");
+        System.out.println("PRIMERO EL MEJOR IT");
         for (int i = 0; i < arrayA.size(); i++) {
             AlgPMDLBit_Clase3_Grupo9 primero = new AlgPMDLBit_Clase3_Grupo9(arrayA.get(i), config.getIteraciones());
             primero.calculaPrimeroElMejor();
+            System.out.print(primero.muestraDatos());
+            log.addTexto(primero.muestraDatos());
         }
 
         System.out.println("");
-        System.out.println("PRIMER MEJOR RANDOM");
+        log.addTexto("\n");
+        System.out.println("PRIMERO EL MEJOR RAN");
         for (int i = 0; i < arrayA.size(); i++) {
             AlgPMDLBrandom_Clase3_Grupo9 primeroAle = new AlgPMDLBrandom_Clase3_Grupo9(arrayA.get(i), config.getIteraciones(), random);
             primeroAle.calculaPrimeroElMejor();
+            System.out.print(primeroAle.muestraDatos());
+            log.addTexto(primeroAle.muestraDatos());
         }
 
         System.out.println("");
+        log.addTexto("\n");
         System.out.println("MULTIARRANQUE");
         for (int i = 0; i < arrayA.size(); i++) {
-            //AlgMA_Clase3_Grupo9 multiA = new AlgMA_Clase3_Grupo9(arrayA.get(i), config.getMaLonguitudLRC(), config.getMaMejoresUnidades(), config.getTamLista(), random);
-            //multiA.calculaMultiarranque();
-            int a=1;
+            AlgMA_Clase3_Grupo9 multiA = new AlgMA_Clase3_Grupo9(arrayA.get(i), config.getIteraciones(),
+                    config.getLonguitudLRC(), config.getCandidatosGreedy(), config.getTamLista(), config.getIteracionesEstrategica(), random);
+            multiA.calculaMultiarranque();
+            System.out.print(multiA.muestraDatos());
+            log.addTexto(multiA.muestraDatos());
         }
 
         log.guardaLog();

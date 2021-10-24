@@ -13,11 +13,14 @@ import java.util.ArrayList;
  */
 public class AlgGRE_Clase3_Grupo9 {
 
+    private final long inicio;
+    private long fin;
     private ArrayList<Integer> conjunto;
     private int costeConjunto;
     private final Archivodedatos archivo;
 
     public AlgGRE_Clase3_Grupo9(Archivodedatos archivo) {
+        inicio = System.currentTimeMillis();
         this.conjunto = new ArrayList<>();
         this.costeConjunto = 0;
         this.archivo = archivo;
@@ -25,18 +28,21 @@ public class AlgGRE_Clase3_Grupo9 {
 
     // Calcula el greedy haciendo las llamadas
     public void calculaGreedy() {
+
         creaConjunto(archivo.getMatriz1(), archivo.getMatriz2());
         costeConjunto = calculaCosteConjunto(conjunto, archivo.getMatriz1(), archivo.getMatriz2());
     }
 
     // Muestra los datos (futuro log)
     public String muestraDatos() {
-        System.out.println("El conjunto de archivos de datos " + archivo.getNombre() + " tiene un coste de " + costeConjunto + " y es el siguiente: ");
+        fin = System.currentTimeMillis();
+        String aux = new String();
         for (int i = 0; i < conjunto.size(); i++) {
-            System.out.print(conjunto.get(i) + "  ");
+            aux += conjunto.get(i) + "  ";
         }
         System.out.println();
-        return "El conjunto de archivos de datos " + archivo.getNombre() + " tiene un coste de " + costeConjunto + " y es el siguiente: ";
+        return "GREEDY \nEl conjunto de archivos de datos " + archivo.getNombre() + " tiene un coste de " + costeConjunto
+                + " con un tiempo de ejecucion de: " + (fin - inicio) + " milisegundos y es el siguiente: \n" + aux + "\n";
     }
 
     // Calcula el coste de un conjunto dado
