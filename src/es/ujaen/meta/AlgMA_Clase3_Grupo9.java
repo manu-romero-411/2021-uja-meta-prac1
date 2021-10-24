@@ -5,10 +5,10 @@
  */
 package es.ujaen.meta;
 
-import com.sun.tools.javac.util.Pair;
+//import com.sun.tools.javac.util.Pair;
 import java.util.ArrayList;
 import java.util.Random;
-//import javafx.util.Pair;
+import javafx.util.Pair;
 
 /**
  *
@@ -130,9 +130,9 @@ public class AlgMA_Clase3_Grupo9 {
     private void oscilacionEstrategica(ArrayList<Integer> conjuntoAux) {
         int aleatorio = random.nextInt(3);
         Pair<Integer, Integer> aux = listaTabu.get(aleatorio);
-        int auxC = conjuntoAux.get(aux.fst);
-        conjuntoAux.set(aux.fst, aux.snd);
-        conjuntoAux.set(aux.snd, auxC);
+        int auxC = conjuntoAux.get(/*aux.fst*/aux.getKey());
+        conjuntoAux.set(/*aux.fst*/aux.getKey(), /*aux.snd*/ aux.getValue());
+        conjuntoAux.set(/*aux.snd*/aux.getValue(), auxC);
     }
 
     private void iniciaLargoPlazo() {
@@ -165,9 +165,9 @@ public class AlgMA_Clase3_Grupo9 {
     }
 
     private void cambiaConjunto(Pair<Integer, Integer> par, ArrayList<Integer> conjuntoAux) {
-        int vAux = conjuntoAux.get(par.fst/*par.getKey()*/);
-        conjuntoAux.set(par.fst/*par.getKey()*/, par.snd /*par.getValue()*/);
-        conjuntoAux.set(par.snd/*par.getValue()*/, vAux);
+        int vAux = conjuntoAux.get(/*par.fst*/par.getKey());
+        conjuntoAux.set(/*par.fst*/par.getKey(), /*par.snd*/ par.getValue());
+        conjuntoAux.set(/*par.snd*/par.getValue(), vAux);
         anadirElementoTabu(par);
         incrementaLargoPlazo(par);
     }
@@ -194,7 +194,7 @@ public class AlgMA_Clase3_Grupo9 {
 
     private boolean estaTabu(int r, int s, ArrayList<Integer> conjuntoAux) {
         for (int i = 0; i < listaTabu.size(); i++) {
-            if (listaTabu.get(i).fst/*listaTabu.get(i).getKey()*/ == r && listaTabu.get(i).snd/*listaTabu.get(i).getValue()*/ == s) {
+            if (/*listaTabu.get(i).fst*/listaTabu.get(i).getKey() == r && /*listaTabu.get(i).snd*/ listaTabu.get(i).getValue() == s) {
                 return true;
             }
         }
@@ -242,9 +242,9 @@ public class AlgMA_Clase3_Grupo9 {
     }
 
     private void incrementaLargoPlazo(Pair<Integer, Integer> elemento) {
-        int aux = memLargoPlazo.get(elemento.fst/*elemento.getKey()*/).get(elemento.snd/*elemento.getValue()*/);
+        int aux = memLargoPlazo.get(/*elemento.fst*/elemento.getKey()).get(/*elemento.snd*/elemento.getValue());
         aux++;
-        memLargoPlazo.get(elemento.fst/*elemento.getKey()*/).set(elemento.snd/*elemento.getValue()*/, aux);
+        memLargoPlazo.get(/*elemento.fst*/elemento.getKey()).set(/*elemento.snd*/elemento.getValue(), aux);
     }
 
     public ArrayList<Integer> getMayorDistancia() {
