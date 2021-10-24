@@ -63,7 +63,6 @@ public class AlgMA_Clase3_Grupo9 {
                 anadirElementoLRC(aux);
             }
         }
-        
         for (int i = 0; i < longitudLRC; i++) {
             Pair<Integer, Integer> aux = LRC.get(i);
         }
@@ -109,4 +108,9 @@ public class AlgMA_Clase3_Grupo9 {
         return conjunto;
     }
 
+    public ArrayList<Pair<Integer, Integer>> getLRC() {
+        return LRC;
+    }
+
+    
 }
