@@ -60,17 +60,16 @@ public class AlgMA_Clase3_Grupo9 {
         creaLRC();
         iniciaLargoPlazo();
         iniciaDLB();
-        for (int i = 0; i < longitudLRC; i++) {
+        for (int i = 0; i < 1; i++) {
             Pair<Integer, Integer> aux = LRC.get(i);
             System.out.println("Vez: " + i);
             hazMultiArranque(aux);
         }
-
     }
 
     private void hazMultiArranque(Pair<Integer, Integer> par) {
         ArrayList<Integer> auxConjunto = conjunto;
-        cambiaConjunto(par, auxConjunto);
+        cambiaConjunto(par.getKey(), par.getValue(), auxConjunto);
 
         boolean dlbCompleto = false;
         int ultMov = 0, cam = 0, k = 0, sinCambiosIt = 0;
@@ -82,8 +81,7 @@ public class AlgMA_Clase3_Grupo9 {
                 for (int j = ((i + 1) % dlb.size()); contJ > 0 && flagMejora == false; j++) {
                     if (i % dlb.size() != j % dlb.size()) {
                         if (factorizacion(i % dlb.size(), j % dlb.size(), auxConjunto) && !estaTabu(i % dlb.size(), j % dlb.size(), auxConjunto)) {
-                            Pair<Integer, Integer> aux = new Pair<>(i % dlb.size(), j % dlb.size());
-                            cambiaConjunto(aux, auxConjunto);
+                            cambiaConjunto(i % dlb.size(), j % dlb.size(), auxConjunto);
                             dlb.set(i % dlb.size(), false);
                             dlb.set(j % dlb.size(), false);
                             flagMejora = true;
@@ -95,6 +93,7 @@ public class AlgMA_Clase3_Grupo9 {
                             if (sinCambiosIt == (int) iteraciones * iteracionesOscilacion) {
                                 oscilacionEstrategica(auxConjunto);
                                 System.out.println("K: " + k);
+                                sinCambiosIt = 0;
                             }
                         }
                     }
@@ -112,6 +111,9 @@ public class AlgMA_Clase3_Grupo9 {
             ultMov = (ultMov + 1) % conjunto.size();
             k++;
         }
+        AlgGRE_Clase3_Grupo9 a = new AlgGRE_Clase3_Grupo9(archivo);
+
+        System.out.println("es.ujaen.meta.AlgMA_Clase3_Grupo9.hazMultiArranque(): " + a.calculaCosteConjunto(auxConjunto, archivo.getMatriz1(), archivo.getMatriz2()));
         muestraAuxConjunto(auxConjunto);
     }
 
@@ -170,10 +172,11 @@ public class AlgMA_Clase3_Grupo9 {
         return true;
     }
 
-    private void cambiaConjunto(Pair<Integer, Integer> par, ArrayList<Integer> conjuntoAux) {
-        int vAux = conjuntoAux.get(/*par.fst*/par.getKey());
-        conjuntoAux.set(/*par.fst*/par.getKey(), /*par.snd*/ par.getValue());
-        conjuntoAux.set(/*par.snd*/par.getValue(), vAux);
+    private void cambiaConjunto(int r, int s, ArrayList<Integer> conjuntoAux) {
+        int aux = conjuntoAux.get(r);
+        conjuntoAux.set(r, conjuntoAux.get(s));
+        conjuntoAux.set(s, aux);
+        Pair<Integer, Integer> par = new Pair<>(r, s);
         anadirElementoTabu(par);
         incrementaLargoPlazo(par);
     }
