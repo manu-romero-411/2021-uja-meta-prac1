@@ -1,4 +1,4 @@
-project-root-directory/
+proproject-root-directory/
 + build/
 + dist/
 + nbproject/
@@ -10,5 +10,3 @@ project-root-directory/
 + test/
 + build.xml
 /build/
-/dist/
-/nbproject/private/
