@@ -113,6 +113,10 @@ public class AlgPMDLBrandom_Clase3_Grupo9 {
                         + (matrizF[k][r] * (matrizD[conjunto.get(k)][conjunto.get(s)] - matrizD[conjunto.get(k)][conjunto.get(r)])));
             }
         }
+        sum += (matrizF[r][r] * (matrizD[conjunto.get(s)][conjunto.get(s)] - matrizD[conjunto.get(r)][conjunto.get(r)]))
+                + (matrizF[s][s] * (matrizD[conjunto.get(r)][conjunto.get(r)] - matrizD[conjunto.get(s)][conjunto.get(s)]))
+                + (matrizF[r][s] * (matrizD[conjunto.get(s)][conjunto.get(r)] - matrizD[conjunto.get(s)][conjunto.get(r)]))
+                + (matrizF[s][r] * (matrizD[conjunto.get(r)][conjunto.get(s)] - matrizD[conjunto.get(s)][conjunto.get(r)]));
         return (sum < 0);
     }
 
