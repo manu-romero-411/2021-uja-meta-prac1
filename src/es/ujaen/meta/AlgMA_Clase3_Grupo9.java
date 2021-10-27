@@ -99,7 +99,6 @@ public class AlgMA_Clase3_Grupo9 {
                     }
                     contJ--;
                 }
-
                 if (flagMejora == false) {
                     dlb.set(i % dlb.size(), true);
                 }
@@ -112,7 +111,6 @@ public class AlgMA_Clase3_Grupo9 {
             k++;
         }
         AlgGRE_Clase3_Grupo9 a = new AlgGRE_Clase3_Grupo9(archivo);
-
         System.out.println("es.ujaen.meta.AlgMA_Clase3_Grupo9.hazMultiArranque(): " + a.calculaCosteConjunto(auxConjunto, archivo.getMatriz1(), archivo.getMatriz2()));
         muestraAuxConjunto(auxConjunto);
     }
@@ -138,9 +136,7 @@ public class AlgMA_Clase3_Grupo9 {
     private void oscilacionEstrategica(ArrayList<Integer> conjuntoAux) {
         int aleatorio = random.nextInt(3);
         Pair<Integer, Integer> aux = listaTabu.get(aleatorio);
-        int auxC = conjuntoAux.get(/*aux.fst*/aux.getKey());
-        conjuntoAux.set(/*aux.fst*/aux.getKey(), /*aux.snd*/ aux.getValue());
-        conjuntoAux.set(/*aux.snd*/aux.getValue(), auxC);
+        cambiaConjunto(aux.getKey(), aux.getValue(), conjuntoAux);
     }
 
     private void iniciaLargoPlazo() {
