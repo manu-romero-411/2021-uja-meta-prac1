@@ -92,7 +92,6 @@ public class AlgMA_Clase3_Grupo9 {
                             sinCambiosIt++;
                             if (sinCambiosIt == (int) iteraciones * iteracionesOscilacion) {
                                 oscilacionEstrategica(auxConjunto);
-                                System.out.println("K: " + k);
                                 sinCambiosIt = 0;
                             }
                         }
@@ -104,8 +103,11 @@ public class AlgMA_Clase3_Grupo9 {
                 }
             }
             if (compruebaDLB()) {
-                dlbCompleto = true;
+                //dlbCompleto = true;
                 System.out.println("K2: " + k);
+                conjuntoMayorML();
+                resetLargoPlazo();
+                resetDLB();
             }
             ultMov = (ultMov + 1) % conjunto.size();
             k++;
@@ -117,19 +119,27 @@ public class AlgMA_Clase3_Grupo9 {
 
     private void conjuntoMayorML() {
         ArrayList<Integer> aux = new ArrayList<>();
-        for (int i = 0; i < memLargoPlazo.size(); i++) {
-            aux.add(0);
-            for (int j = 0; j < memLargoPlazo.size(); j++) {
-                int incre = aux.get(i) + memLargoPlazo.get(i).get(j);
-                aux.set(i, incre);
+        int guardarj = -1;
+        int guardari = -1;
+        for (int k = 0; k < conjunto.size(); k++) {
+            int mayor = Integer.MIN_VALUE;
+            for (int i = 0; i < memLargoPlazo.size(); i++) {
+                for (int j = 0; j < memLargoPlazo.size(); j++) {
+                    if (memLargoPlazo.get(i).get(j) > mayor) {
+                        guardarj = j;
+                        guardari = i;
+                        mayor = memLargoPlazo.get(i).get(j);
+                    }
+                }
             }
+            ArrayList<Integer> auxLP = memLargoPlazo.get(mayor);
+            auxLP.set(guardarj, 0);
+            memLargoPlazo.set(guardari, auxLP);
+            aux.add(guardarj);
         }
-        ArrayList<Integer> aux2 = aux;
-        int mayor = 0;
+        System.out.println("es.ujaen.meta.AlgMA_Clase3_Grupo9.conjuntoMayorML()");
         for (int i = 0; i < aux.size(); i++) {
-            for (int j = 0; j < aux.size(); j++) {
-
-            }
+            System.out.print(aux.get(i) + " ");
         }
     }
 
@@ -168,13 +178,15 @@ public class AlgMA_Clase3_Grupo9 {
     }
 
     private void resetLargoPlazo() {
-        ArrayList<Integer> aux = new ArrayList<>();
+        ArrayList<ArrayList<Integer>> aux = new ArrayList<>();
+        ArrayList<Integer> aux2 = new ArrayList<>();
         for (int i = 0; i < conjunto.size(); i++) {
             for (int j = 0; j < conjunto.size(); j++) {
-                aux.set(j, 0);
+                aux2.add(0);
             }
-            memLargoPlazo.set(i, aux);
+            aux.add(aux2);
         }
+        memLargoPlazo = aux;
     }
 
     private boolean compruebaDLB() {
