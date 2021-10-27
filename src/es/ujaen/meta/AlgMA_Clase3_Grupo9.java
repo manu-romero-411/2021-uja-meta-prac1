@@ -8,6 +8,7 @@ package es.ujaen.meta;
 //import com.sun.tools.javac.util.Pair;
 import java.util.ArrayList;
 import java.util.Random;
+import javafx.util.Pair;
 
 /**
  *
@@ -33,6 +34,7 @@ public class AlgMA_Clase3_Grupo9 {
     private ArrayList<Boolean> dlb;
     private int longitudLRC;
     private boolean flagMejora;
+    private ArrayList<Integer> costesLargoPlazo = new ArrayList<>();
 
     public AlgMA_Clase3_Grupo9(Archivodedatos archivo, int iteraciones, int longitudLRC, int mejoresUnidades, int tamLista, float iteracionesOscilacion, Random random) {
         this.archivo = archivo;
@@ -52,6 +54,8 @@ public class AlgMA_Clase3_Grupo9 {
         this.dlb = new ArrayList<>();
         this.flagMejora = true;
         this.inicio = System.currentTimeMillis();
+        this.costesLargoPlazo = new ArrayList<>();
+
     }
 
     // Calcula el multiarranque
@@ -106,12 +110,47 @@ public class AlgMA_Clase3_Grupo9 {
             }
             if (compruebaDLB()) {
                 dlbCompleto = true;
+                int solucionTabu = mejorSolucion();
+                if (solucionTabu != -1){
+                    // aquí colocaríamos lo necesario para usar la solución escogida
+                    
+                }
                 resetDLB();
                 System.out.println("K2: " + k);
             }
             ultMov = (ultMov + 1) % conjunto.size();
             k++;
         }
+    }
+    
+    private int mejorSolucion(){
+        AlgGRE_Clase3_Grupo9 gre = new AlgGRE_Clase3_Grupo9(archivo);
+
+        for(int i = 0; i < memLargoPlazo.size(); ++i){
+            costesLargoPlazo.add(i, gre.calculaCosteConjunto(memLargoPlazo.get(i), archivo.getMatriz1(), archivo.getMatriz2()));
+            //System.out.print(costesLargoPlazo.get(i) + " ");
+        }
+        //System.out.println();
+        int nuevoCoste = Integer.MAX_VALUE;
+        int solucionEscogible = -1;
+        int i = 0;
+        while (nuevoCoste > coste && i < costesLargoPlazo.get(i)){
+            if (costesLargoPlazo.get(i) < coste){
+                nuevoCoste = costesLargoPlazo.get(i);
+                solucionEscogible = i;
+            }
+            i++;
+        }
+        if (solucionEscogible == -1){
+            int mayor = Integer.MIN_VALUE;
+            for (int j = 0; i < costesLargoPlazo.size(); ++i){
+                if(mayor < costesLargoPlazo.get(i)){
+                    mayor = costesLargoPlazo.get(i);
+                    solucionEscogible = i;
+                }
+            }
+        }
+        return solucionEscogible;
     }
 
     private void iniciaDLB() {
@@ -241,9 +280,9 @@ public class AlgMA_Clase3_Grupo9 {
     }
 
     private void incrementaLargoPlazo(Pair<Integer, Integer> elemento) {
-        int aux = memLargoPlazo.get(/*elemento.fst*/elemento.getKey()).get(/*elemento.snd*/elemento.getValue());
+        int aux = memLargoPlazo.get(elemento.getKey()).get(elemento.getValue());
         aux++;
-        memLargoPlazo.get(/*elemento.fst*/elemento.getKey()).set(/*elemento.snd*/elemento.getValue(), aux);
+        memLargoPlazo.get(elemento.getKey()).set(elemento.getValue(), aux);
     }
 
     public ArrayList<Integer> getMayorDistancia() {

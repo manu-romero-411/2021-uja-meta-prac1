@@ -68,7 +68,7 @@ public class AlgPMDLBit_Clase3_Grupo9 {
                             cam++;
                         }
                     }
-                    if (compruebaDLB(dlb)) {
+                    if (compruebaDLB()) {
                         dlbCompleto = true;
                     }
                     contJ--;
