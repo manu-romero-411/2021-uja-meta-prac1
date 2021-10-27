@@ -98,6 +98,14 @@ public class prac1 {
         for (int i = 0; i < array.length; i++) {
             System.out.printf(array[i] + " ");
         }
+        System.out.println("");
+    }
+    
+    public static void muestraArray(ArrayList<Integer> array) {
+        for (int i = 0; i < array.size(); i++) {
+            System.out.printf(array.get(i) + " ");
+        }
+        System.out.println("");
     }
 
     public static void muestraMatriz(int matriz[][]) {
