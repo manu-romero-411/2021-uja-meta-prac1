@@ -115,6 +115,24 @@ public class AlgMA_Clase3_Grupo9 {
         muestraAuxConjunto(auxConjunto);
     }
 
+    private void conjuntoMayorML() {
+        ArrayList<Integer> aux = new ArrayList<>();
+        for (int i = 0; i < memLargoPlazo.size(); i++) {
+            aux.add(0);
+            for (int j = 0; j < memLargoPlazo.size(); j++) {
+                int incre = aux.get(i) + memLargoPlazo.get(i).get(j);
+                aux.set(i, incre);
+            }
+        }
+        ArrayList<Integer> aux2 = aux;
+        int mayor = 0;
+        for (int i = 0; i < aux.size(); i++) {
+            for (int j = 0; j < aux.size(); j++) {
+
+            }
+        }
+    }
+
     private void muestraAuxConjunto(ArrayList<Integer> auxConjunto) {
         for (int i = 0; i < auxConjunto.size(); i++) {
             System.out.print(auxConjunto.get(i) + " ");
