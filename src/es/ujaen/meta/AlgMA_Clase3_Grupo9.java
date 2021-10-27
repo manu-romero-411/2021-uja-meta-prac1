@@ -26,13 +26,13 @@ public class AlgMA_Clase3_Grupo9 {
     private final int candidatosGreedy;
     private final int tamLista;
     private final float iteracionesOscilacion;
-    private Random random;
+    private final Random random;
     private ArrayList<Pair<Integer, Integer>> LRC;
     private ArrayList<ArrayList<Integer>> memLargoPlazo;
     private ArrayList<Integer> mayorFlujo;
     private ArrayList<Integer> mayorDistancia;
     private ArrayList<Boolean> dlb;
-    private int longitudLRC;
+    private final int longitudLRC;
     private boolean flagMejora;
     private ArrayList<Integer> costesLargoPlazo = new ArrayList<>();
 
@@ -106,17 +106,13 @@ public class AlgMA_Clase3_Grupo9 {
                 }
             }
             if (compruebaDLB()) {
-<<<<<<< HEAD
-                //dlbCompleto = true;
-=======
                 dlbCompleto = true;
                 int solucionTabu = mejorSolucion();
-                if (solucionTabu != -1){
+                if (solucionTabu != -1) {
                     // aquí colocaríamos lo necesario para usar la solución escogida
-                    
+
                 }
                 resetDLB();
->>>>>>> manuDev
                 System.out.println("K2: " + k);
                 conjuntoMayorML();
                 resetLargoPlazo();
@@ -161,11 +157,11 @@ public class AlgMA_Clase3_Grupo9 {
             System.out.print(auxConjunto.get(i) + " ");
         }
     }
-    
-    private int mejorSolucion(){
+
+    private int mejorSolucion() {
         AlgGRE_Clase3_Grupo9 gre = new AlgGRE_Clase3_Grupo9(archivo);
 
-        for(int i = 0; i < memLargoPlazo.size(); ++i){
+        for (int i = 0; i < memLargoPlazo.size(); i++) {
             costesLargoPlazo.add(i, gre.calculaCosteConjunto(memLargoPlazo.get(i), archivo.getMatriz1(), archivo.getMatriz2()));
             //System.out.print(costesLargoPlazo.get(i) + " ");
         }
@@ -173,17 +169,17 @@ public class AlgMA_Clase3_Grupo9 {
         int nuevoCoste = Integer.MAX_VALUE;
         int solucionEscogible = -1;
         int i = 0;
-        while (nuevoCoste > coste && i < costesLargoPlazo.get(i)){
-            if (costesLargoPlazo.get(i) < coste){
+        while (nuevoCoste > coste && i < costesLargoPlazo.get(i)) {
+            if (costesLargoPlazo.get(i) < coste) {
                 nuevoCoste = costesLargoPlazo.get(i);
                 solucionEscogible = i;
             }
             i++;
         }
-        if (solucionEscogible == -1){
+        if (solucionEscogible == -1) {
             int mayor = Integer.MIN_VALUE;
-            for (int j = 0; i < costesLargoPlazo.size(); ++i){
-                if(mayor < costesLargoPlazo.get(i)){
+            for (int j = 0; i < costesLargoPlazo.size(); i++) {
+                if (mayor < costesLargoPlazo.get(i)) {
                     mayor = costesLargoPlazo.get(i);
                     solucionEscogible = i;
                 }
@@ -213,9 +209,9 @@ public class AlgMA_Clase3_Grupo9 {
     private void iniciaLargoPlazo() {
         ArrayList<Integer> aux = new ArrayList<>();
         for (int i = 0; i < conjunto.size(); i++) {
-            for (int j = 0; j < conjunto.size(); j++) {
-                aux.add(0);
-            }
+            aux.add(0);
+        }
+        for (int i = 0; i < conjunto.size(); i++) {
             memLargoPlazo.add(aux);
         }
     }
@@ -310,7 +306,7 @@ public class AlgMA_Clase3_Grupo9 {
                 + (matrizF[s][r] * (matrizD[conjunto.get(r)][conjunto.get(s)] - matrizD[conjunto.get(s)][conjunto.get(r)]));
         return (sum < 0);
     }
-    
+
     private void anadirElementoTabu(Pair<Integer, Integer> elemento) {
         if (listaTabu.size() < tamLista) {
             listaTabu.add(elemento);
