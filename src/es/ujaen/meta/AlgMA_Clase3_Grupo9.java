@@ -72,6 +72,8 @@ public class AlgMA_Clase3_Grupo9 {
 
     private void hazMultiArranque(Pair<Integer, Integer> par) {
         ArrayList<Integer> auxConjunto = conjunto;
+        ArrayList<Integer> mejorPeor = conjunto;
+        int costeMejorPeor = calculaCosteConjunto(mejorPeor, archivo.getMatriz1(), archivo.getMatriz2());
         cambiaConjunto(par.getKey(), par.getValue(), auxConjunto);
 
         boolean dlbCompleto = false;
@@ -83,7 +85,7 @@ public class AlgMA_Clase3_Grupo9 {
                 int contJ = dlb.size() - 1;
                 for (int j = ((i + 1) % dlb.size()); contJ > 0 && flagMejora == false; j++) {
                     if (i % dlb.size() != j % dlb.size()) {
-                        if (factorizacion(i % dlb.size(), j % dlb.size(), auxConjunto) && !estaTabu(i % dlb.size(), j % dlb.size(), auxConjunto)) {
+                        if (factorizacion(i % dlb.size(), j % dlb.size(), auxConjunto, mejorPeor, costeMejorPeor) && !estaTabu(i % dlb.size(), j % dlb.size(), auxConjunto)) {
                             cambiaConjunto(i % dlb.size(), j % dlb.size(), auxConjunto);
                             dlb.set(i % dlb.size(), false);
                             dlb.set(j % dlb.size(), false);
@@ -110,7 +112,8 @@ public class AlgMA_Clase3_Grupo9 {
 
                 resetDLB();
                 System.out.println("K2: " + k);
-                conjuntoMayorML();
+                //conjuntoMayorML();
+                auxConjunto = mejorPeor;
                 resetLargoPlazo();
                 resetDLB();
             }
@@ -279,7 +282,7 @@ public class AlgMA_Clase3_Grupo9 {
                 + " con un tiempo de ejecucion de: " + (fin - inicio) + " milisegundos y es el siguiente: \n" + aux + "\n";
     }
 
-    private boolean factorizacion(int r, int s, ArrayList<Integer> conjuntoAux) {
+    private boolean factorizacion(int r, int s, ArrayList<Integer> conjuntoAux, ArrayList<Integer> mejorPeor, int costeMejorPeor) {
         int matrizF[][] = archivo.getMatriz1();
         int matrizD[][] = archivo.getMatriz2();
         int sum = 0;
@@ -292,11 +295,41 @@ public class AlgMA_Clase3_Grupo9 {
                         + (matrizF[k][r] * (matrizD[conjuntoAux.get(k)][conjuntoAux.get(s)] - matrizD[conjuntoAux.get(k)][conjuntoAux.get(r)])));
             }
         }
-        sum += (matrizF[r][r] * (matrizD[conjunto.get(s)][conjunto.get(s)] - matrizD[conjunto.get(r)][conjunto.get(r)]))
-                + (matrizF[s][s] * (matrizD[conjunto.get(r)][conjunto.get(r)] - matrizD[conjunto.get(s)][conjunto.get(s)]))
-                + (matrizF[r][s] * (matrizD[conjunto.get(s)][conjunto.get(r)] - matrizD[conjunto.get(s)][conjunto.get(r)]))
-                + (matrizF[s][r] * (matrizD[conjunto.get(r)][conjunto.get(s)] - matrizD[conjunto.get(s)][conjunto.get(r)]));
-        return (sum < 0);
+        sum += (matrizF[r][r] * (matrizD[conjuntoAux.get(s)][conjuntoAux.get(s)] - matrizD[conjuntoAux.get(r)][conjuntoAux.get(r)]))
+                + (matrizF[s][s] * (matrizD[conjuntoAux.get(r)][conjuntoAux.get(r)] - matrizD[conjuntoAux.get(s)][conjuntoAux.get(s)]))
+                + (matrizF[r][s] * (matrizD[conjuntoAux.get(s)][conjuntoAux.get(r)] - matrizD[conjuntoAux.get(s)][conjuntoAux.get(r)]))
+                + (matrizF[s][r] * (matrizD[conjuntoAux.get(r)][conjuntoAux.get(s)] - matrizD[conjuntoAux.get(s)][conjuntoAux.get(r)]));
+        if (sum < 0) {
+            return true;
+        } else {
+            ArrayList<Integer> auxMejorPeor = new ArrayList<>();
+
+            for (int i = 0; i < conjuntoAux.size(); i++) {
+                auxMejorPeor.add(conjuntoAux.get(i));
+            }
+
+            int aux = auxMejorPeor.get(r);
+            auxMejorPeor.set(r, auxMejorPeor.get(s));
+            auxMejorPeor.set(s, aux);
+
+            int costeAux = calculaCosteConjunto(auxMejorPeor, archivo.getMatriz1(), archivo.getMatriz2());
+            if (costeMejorPeor > costeAux) {
+                mejorPeor = auxMejorPeor;
+                costeMejorPeor = costeAux;
+            }
+        }
+        return false;
+
+    }
+
+    public int calculaCosteConjunto(ArrayList<Integer> conjunto, int matrizFlujo[][], int matrizDistancia[][]) {
+        int coste = 0;
+        for (int i = 0; i < conjunto.size(); i++) {
+            for (int j = 0; j < conjunto.size(); j++) {
+                coste += matrizFlujo[i][j] * matrizDistancia[conjunto.get(i)][conjunto.get(j)];
+            }
+        }
+        return coste;
     }
 
     private void anadirElementoTabu(Pair<Integer, Integer> elemento) {
