@@ -69,6 +69,7 @@ public class AlgMA_Clase3_Grupo9 {
             conjunto = hazMultiArranque(aux);
         }
         muestraAuxConjunto(conjunto);
+        coste = calculaCosteConjunto(conjunto, archivo.getMatriz1(), archivo.getMatriz2());
     }
 
     private ArrayList<Integer> hazMultiArranque(Pair<Integer, Integer> par) {
