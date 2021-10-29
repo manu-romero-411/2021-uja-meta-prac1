@@ -63,22 +63,22 @@ public class AlgMA_Clase3_Grupo9 {
         creaLRC();
         iniciaLargoPlazo();
         iniciaDLB();
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < longitudLRC; i++) {
             Pair<Integer, Integer> aux = LRC.get(i);
             System.out.println("Vez: " + i);
-            hazMultiArranque(aux);
+            conjunto = hazMultiArranque(aux);
         }
+        muestraAuxConjunto(conjunto);
     }
 
-    private void hazMultiArranque(Pair<Integer, Integer> par) {
-        ArrayList<Integer> auxConjunto = conjunto;
-        ArrayList<Integer> mejorPeor = conjunto;
+    private ArrayList<Integer> hazMultiArranque(Pair<Integer, Integer> par) {
+        ArrayList<Integer> auxConjunto = new ArrayList<>(conjunto);
+        ArrayList<Integer> mejorPeor = new ArrayList<>(conjunto);
         int costeMejorPeor = calculaCosteConjunto(mejorPeor, archivo.getMatriz1(), archivo.getMatriz2());
         cambiaConjunto(par.getKey(), par.getValue(), auxConjunto);
 
-        boolean dlbCompleto = false;
         int ultMov = 0, cam = 0, k = 0, sinCambiosIt = 0;
-        while (k < iteraciones && !dlbCompleto) {
+        while (k < iteraciones) {
             int i = ultMov;
             if (dlb.get(i % dlb.size()) == false) {
                 flagMejora = false;
@@ -108,45 +108,22 @@ public class AlgMA_Clase3_Grupo9 {
                 }
             }
             if (compruebaDLB()) {
-                dlbCompleto = true;
 
-                resetDLB();
-                System.out.println("K2: " + k);
+                //System.out.println("K2: " + k);
                 //conjuntoMayorML();
-                auxConjunto = mejorPeor;
+                for (int j = 0; j < mejorPeor.size(); j++) {
+                    auxConjunto.set(j, mejorPeor.get(j));
+                }
+                //auxConjunto = mejorPeor;
                 resetLargoPlazo();
                 resetDLB();
             }
             ultMov = (ultMov + 1) % conjunto.size();
             k++;
         }
-        AlgGRE_Clase3_Grupo9 a = new AlgGRE_Clase3_Grupo9(archivo);
-        System.out.println("es.ujaen.meta.AlgMA_Clase3_Grupo9.hazMultiArranque(): " + a.calculaCosteConjunto(auxConjunto, archivo.getMatriz1(), archivo.getMatriz2()));
-        muestraAuxConjunto(auxConjunto);
-    }
-
-    private void conjuntoMayorML() {
-        ArrayList<Integer> aux = new ArrayList<>();
-        for (int k = 0; k < conjunto.size(); k++) {
-            int guardari = -1;
-            int mayor = Integer.MIN_VALUE;
-            for (int i = 0; i < memLargoPlazo.size(); i++) {
-                if (!aux.contains(i)) {
-                    for (int j = 0; j < memLargoPlazo.size(); j++) {
-                        if (memLargoPlazo.get(i).get(j) > mayor) {
-                            guardari = i;
-                            mayor = memLargoPlazo.get(i).get(j);
-                        }
-                    }
-                }
-            }
-            aux.add(guardari);
-        }
-        System.out.println("es.ujaen.meta.AlgMA_Clase3_Grupo9.conjuntoMayorML()");
-        for (int i = 0; i < aux.size(); i++) {
-            System.out.print(aux.get(i) + " ");
-        }
-        System.out.println("es.ujaen.meta.AlgMA_Clase3_Grupo9.conjuntoMayorML()");
+        System.out.println("es.ujaen.meta.AlgMA_Clase3_Grupo9.hazMultiArranque(): " + calculaCosteConjunto(auxConjunto, archivo.getMatriz1(), archivo.getMatriz2()));
+        //muestraAuxConjunto(auxConjunto);
+        return auxConjunto;
     }
 
     private void muestraAuxConjunto(ArrayList<Integer> auxConjunto) {
@@ -302,11 +279,7 @@ public class AlgMA_Clase3_Grupo9 {
         if (sum < 0) {
             return true;
         } else {
-            ArrayList<Integer> auxMejorPeor = new ArrayList<>();
-
-            for (int i = 0; i < conjuntoAux.size(); i++) {
-                auxMejorPeor.add(conjuntoAux.get(i));
-            }
+            ArrayList<Integer> auxMejorPeor = new ArrayList<>(mejorPeor);
 
             int aux = auxMejorPeor.get(r);
             auxMejorPeor.set(r, auxMejorPeor.get(s));
@@ -314,7 +287,9 @@ public class AlgMA_Clase3_Grupo9 {
 
             int costeAux = calculaCosteConjunto(auxMejorPeor, archivo.getMatriz1(), archivo.getMatriz2());
             if (costeMejorPeor > costeAux) {
-                mejorPeor = auxMejorPeor;
+                for (int i = 0; i < mejorPeor.size(); i++) {
+                    mejorPeor.set(i, auxMejorPeor.get(i));
+                }
                 costeMejorPeor = costeAux;
             }
         }
