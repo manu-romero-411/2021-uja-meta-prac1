@@ -51,7 +51,6 @@ public class AlgPMDLBrandom_Clase3_Grupo9 {
     private void mejora() {
         int ultMov = random.nextInt(dlb.size());
         boolean dlbCompleto = false;
-        int cam = 0;
         int k = 0;
         while (k < iteraciones && !dlbCompleto) {
             int i = ultMov;
@@ -66,7 +65,6 @@ public class AlgPMDLBrandom_Clase3_Grupo9 {
                             dlb.set(j % dlb.size(), false);
                             flagMejora = true;
                             ultMov = conjunto.get(j % dlb.size());
-                            cam++;
                         }
                     }
                     contJ--;
