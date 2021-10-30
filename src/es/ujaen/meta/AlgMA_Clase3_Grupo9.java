@@ -34,7 +34,6 @@ public class AlgMA_Clase3_Grupo9 {
     private ArrayList<Boolean> dlb;
     private final int longitudLRC;
     private boolean flagMejora;
-    private ArrayList<Integer> costesLargoPlazo = new ArrayList<>();
 
     public AlgMA_Clase3_Grupo9(Archivodedatos archivo, int iteraciones, int longitudLRC, int mejoresUnidades, int tamLista, float iteracionesOscilacion, Random random) {
         this.archivo = archivo;
@@ -54,7 +53,6 @@ public class AlgMA_Clase3_Grupo9 {
         this.dlb = new ArrayList<>();
         this.flagMejora = true;
         this.inicio = System.currentTimeMillis();
-        this.costesLargoPlazo = new ArrayList<>();
 
     }
 

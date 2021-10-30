@@ -33,22 +33,25 @@ public class AlgPMDLBit_Clase3_Grupo9 {
     }
 
     // Calcula el primero el mejor iterativo
-    public void calculaPrimeroElMejor() {
-        AlgGRE_Clase3_Grupo9 greedyA = new AlgGRE_Clase3_Grupo9(archivo);
-        greedyA.calculaGreedy();
-        this.conjunto = greedyA.getConjunto();
-        this.mejorCoste = greedyA.getCosteConjunto();
+    public void calculaPrimerMejor() {
+        AlgGRE_Clase3_Grupo9 greedy = new AlgGRE_Clase3_Grupo9(archivo);
+        greedy.calculaGreedy();
+        this.conjunto = greedy.getConjunto();
+        this.mejorCoste = greedy.getCosteConjunto();
+        iniciaDLB();
+        mejora();
+        mejorCoste = calculaCosteConjunto(conjunto);
+    }
+
+    private void iniciaDLB() {
         for (int i = 0; i < conjunto.size(); i++) {
             dlb.add(false);
         }
-        mejora();
-        mejorCoste = greedyA.calculaCosteConjunto(conjunto, archivo.getMatriz1(), archivo.getMatriz2());
     }
 
     private void mejora() {
         boolean dlbCompleto = false;
         int ultMov = 0;
-        int cam = 0;
         int k = 0;
         while (k < iteraciones && !dlbCompleto) {
             int i = ultMov;
@@ -63,7 +66,6 @@ public class AlgPMDLBit_Clase3_Grupo9 {
                             dlb.set(j % dlb.size(), false);
                             flagMejora = true;
                             ultMov = conjunto.get(j % dlb.size());
-                            cam++;
                         }
                     }
                     if (compruebaDLB()) {
@@ -82,6 +84,16 @@ public class AlgPMDLBit_Clase3_Grupo9 {
             ultMov = (ultMov + 1) % conjunto.size();
             k++;
         }
+    }
+
+    public int calculaCosteConjunto(ArrayList<Integer> conjunto) {
+        int coste = 0;
+        for (int i = 0; i < conjunto.size(); i++) {
+            for (int j = 0; j < conjunto.size(); j++) {
+                coste += archivo.getMatriz1()[i][j] * archivo.getMatriz2()[conjunto.get(i)][conjunto.get(j)];
+            }
+        }
+        return coste;
     }
 
     private boolean compruebaDLB() {

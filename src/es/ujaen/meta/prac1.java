@@ -36,6 +36,8 @@ public class prac1 {
             Log log = new Log(config.getSalidaLog()+"_semilla_"+config.getSemillas().get(j));
             Random random = new Random(config.getSemillas().get(j));
 
+            System.out.println("SEMILLA: "+ config.getSemillas().get(j));
+            
             System.out.println("GREEDY");
             for (int i = 0; i < arrayA.size(); i++) {
                 AlgGRE_Clase3_Grupo9 greedy = new AlgGRE_Clase3_Grupo9(arrayA.get(i));
@@ -49,7 +51,7 @@ public class prac1 {
             System.out.println("PRIMERO EL MEJOR IT");
             for (int i = 0; i < arrayA.size(); i++) {
                 AlgPMDLBit_Clase3_Grupo9 primero = new AlgPMDLBit_Clase3_Grupo9(arrayA.get(i), config.getIteraciones());
-                primero.calculaPrimeroElMejor();
+                primero.calculaPrimerMejor();
                 System.out.print(primero.muestraDatos());
                 log.addTexto(primero.muestraDatos());
             }
