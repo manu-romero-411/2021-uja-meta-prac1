@@ -41,11 +41,15 @@ public class AlgPMDLBrandom_Clase3_Grupo9 {
         greedy.calculaGreedy();
         this.conjunto = greedy.getConjunto();
         this.mejorCoste = greedy.getCosteConjunto();
-        for (int i = 0; i < conjunto.size(); i++) {
-            dlb.add(Boolean.FALSE);
-        }
+        iniciaDLB();
         mejora();
         mejorCoste = calculaCosteConjunto(conjunto);
+    }
+    
+    private void iniciaDLB() {
+        for (int i = 0; i < conjunto.size(); i++) {
+            dlb.add(false);
+        }
     }
 
     private void mejora() {
