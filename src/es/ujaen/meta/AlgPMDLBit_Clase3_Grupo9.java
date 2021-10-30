@@ -38,13 +38,11 @@ public class AlgPMDLBit_Clase3_Grupo9 {
         greedyA.calculaGreedy();
         this.conjunto = greedyA.getConjunto();
         this.mejorCoste = greedyA.getCosteConjunto();
-        System.out.println("El mejor coste de " + archivo.getNombre() + " es: " + mejorCoste);
         for (int i = 0; i < conjunto.size(); i++) {
             dlb.add(false);
         }
         mejora();
         mejorCoste = greedyA.calculaCosteConjunto(conjunto, archivo.getMatriz1(), archivo.getMatriz2());
-        //muestraDatos();
     }
 
     private void mejora() {
@@ -58,7 +56,7 @@ public class AlgPMDLBit_Clase3_Grupo9 {
                 flagMejora = false;
                 int contJ = dlb.size() - 1;
                 for (int j = ((i + 1) % dlb.size()); contJ > 0 && flagMejora == false; j++) {
-                    if (i % dlb.size() != j % dlb.size())  {
+                    if (i % dlb.size() != j % dlb.size()) {
                         if (checkMove(i % dlb.size(), j % dlb.size())) {
                             applyMove(i % dlb.size(), j % dlb.size());
                             dlb.set(i % dlb.size(), false);
@@ -84,7 +82,6 @@ public class AlgPMDLBit_Clase3_Grupo9 {
             ultMov = (ultMov + 1) % conjunto.size();
             k++;
         }
-        System.out.println("ITERACIONES BUENAS: " + cam);
     }
 
     private boolean compruebaDLB() {
@@ -122,6 +119,11 @@ public class AlgPMDLBit_Clase3_Grupo9 {
                         + (matrizF[k][r] * (matrizD[conjunto.get(k)][conjunto.get(s)] - matrizD[conjunto.get(k)][conjunto.get(r)])));
             }
         }
+        sum += (matrizF[r][r] * (matrizD[conjunto.get(s)][conjunto.get(s)] - matrizD[conjunto.get(r)][conjunto.get(r)]))
+                + (matrizF[s][s] * (matrizD[conjunto.get(r)][conjunto.get(r)] - matrizD[conjunto.get(s)][conjunto.get(s)]))
+                + (matrizF[r][s] * (matrizD[conjunto.get(s)][conjunto.get(r)] - matrizD[conjunto.get(s)][conjunto.get(r)]))
+                + (matrizF[s][r] * (matrizD[conjunto.get(r)][conjunto.get(s)] - matrizD[conjunto.get(s)][conjunto.get(r)]));
+
         return (sum < 0);
     }
 

@@ -17,6 +17,8 @@ import javafx.util.Pair;
 public class AlgMA_Clase3_Grupo9 {
 
     private final long inicio;
+    private ArrayList<Pair<Integer, Integer>> listaTabu;
+    private ArrayList<ArrayList<Integer>> memLargoPlazo;
     private long fin;
     private ArrayList<Integer> conjunto;
     private int coste;
@@ -25,14 +27,12 @@ public class AlgMA_Clase3_Grupo9 {
     private final int candidatosGreedy;
     private final int tamLista;
     private final float iteracionesOscilacion;
-    private Random random;
+    private final Random random;
     private ArrayList<Pair<Integer, Integer>> LRC;
-    private ArrayList<Pair<Integer, Integer>> listaTabu;
-    private ArrayList<ArrayList<Integer>> memLargoPlazo;
     private ArrayList<Integer> mayorFlujo;
     private ArrayList<Integer> mayorDistancia;
     private ArrayList<Boolean> dlb;
-    private int longitudLRC;
+    private final int longitudLRC;
     private boolean flagMejora;
     private ArrayList<Integer> costesLargoPlazo = new ArrayList<>();
 
@@ -63,30 +63,47 @@ public class AlgMA_Clase3_Grupo9 {
         creaLRC();
         iniciaLargoPlazo();
         iniciaDLB();
+        ArrayList<Integer> costes = new ArrayList<>();
+        int posCoste = 0;
+        ArrayList<ArrayList<Integer>> auxiliar = new ArrayList<>();
         for (int i = 0; i < longitudLRC; i++) {
             Pair<Integer, Integer> aux = LRC.get(i);
-            System.out.println("Vez: " + i);
-            hazMultiArranque(aux);
+            conjunto = hazMultiArranque(aux);
+            costes.add(calculaCosteConjunto(conjunto));
+            auxiliar.add(conjunto);
         }
-
+        int costeMejor = Integer.MAX_VALUE;
+        for (int i = 0; i < longitudLRC; i++) {
+            if (costes.get(i) < costeMejor) {
+                costeMejor = costes.get(i);
+                posCoste = i;
+            }
+        }
+        conjunto = auxiliar.get(posCoste);
+        coste = calculaCosteConjunto(conjunto);
     }
 
-    private void hazMultiArranque(Pair<Integer, Integer> par) {
-        ArrayList<Integer> auxConjunto = conjunto;
-        cambiaConjunto(par, auxConjunto);
+    private ArrayList<Integer> hazMultiArranque(Pair<Integer, Integer> par) {
+        ArrayList<Integer> auxConjunto = new ArrayList<>(conjunto);
+        ArrayList<Integer> mejorPeor = new ArrayList<>(conjunto);
+        int costeMejorPeor = calculaCosteConjunto(mejorPeor);
+        cambiaConjunto(par.getKey(), par.getValue(), auxConjunto);
 
-        boolean dlbCompleto = false;
+        mejora(auxConjunto, mejorPeor, costeMejorPeor);
+        return auxConjunto;
+    }
+
+    private void mejora(ArrayList<Integer> auxConjunto, ArrayList<Integer> mejorPeor, int costeMejorPeor) {
         int ultMov = 0, cam = 0, k = 0, sinCambiosIt = 0;
-        while (k < iteraciones && !dlbCompleto) {
+        while (k < iteraciones) {
             int i = ultMov;
             if (dlb.get(i % dlb.size()) == false) {
                 flagMejora = false;
                 int contJ = dlb.size() - 1;
                 for (int j = ((i + 1) % dlb.size()); contJ > 0 && flagMejora == false; j++) {
                     if (i % dlb.size() != j % dlb.size()) {
-                        if (factorizacion(i % dlb.size(), j % dlb.size(), auxConjunto) && !estaTabu(i % dlb.size(), j % dlb.size(), auxConjunto)) {
-                            Pair<Integer, Integer> aux = new Pair<>(i % dlb.size(), j % dlb.size());
-                            cambiaConjunto(aux, auxConjunto);
+                        if (factorizacion(i % dlb.size(), j % dlb.size(), auxConjunto, mejorPeor, costeMejorPeor) && !estaTabu(i % dlb.size(), j % dlb.size(), auxConjunto)) {
+                            cambiaConjunto(i % dlb.size(), j % dlb.size(), auxConjunto);
                             dlb.set(i % dlb.size(), false);
                             dlb.set(j % dlb.size(), false);
                             flagMejora = true;
@@ -97,60 +114,26 @@ public class AlgMA_Clase3_Grupo9 {
                             sinCambiosIt++;
                             if (sinCambiosIt == (int) iteraciones * iteracionesOscilacion) {
                                 oscilacionEstrategica(auxConjunto);
-                                System.out.println("K: " + k);
+                                sinCambiosIt = 0;
                             }
                         }
                     }
                     contJ--;
                 }
-
                 if (flagMejora == false) {
                     dlb.set(i % dlb.size(), true);
                 }
             }
             if (compruebaDLB()) {
-                dlbCompleto = true;
-                int solucionTabu = mejorSolucion();
-                if (solucionTabu != -1){
-                    // aquí colocaríamos lo necesario para usar la solución escogida
-                    
+                for (int j = 0; j < mejorPeor.size(); j++) {
+                    auxConjunto.set(j, mejorPeor.get(j));
                 }
+                resetLargoPlazo();
                 resetDLB();
-                System.out.println("K2: " + k);
             }
             ultMov = (ultMov + 1) % conjunto.size();
             k++;
         }
-    }
-    
-    private int mejorSolucion(){
-        AlgGRE_Clase3_Grupo9 gre = new AlgGRE_Clase3_Grupo9(archivo);
-
-        for(int i = 0; i < memLargoPlazo.size(); ++i){
-            costesLargoPlazo.add(i, gre.calculaCosteConjunto(memLargoPlazo.get(i), archivo.getMatriz1(), archivo.getMatriz2()));
-            //System.out.print(costesLargoPlazo.get(i) + " ");
-        }
-        //System.out.println();
-        int nuevoCoste = Integer.MAX_VALUE;
-        int solucionEscogible = -1;
-        int i = 0;
-        while (nuevoCoste > coste && i < costesLargoPlazo.get(i)){
-            if (costesLargoPlazo.get(i) < coste){
-                nuevoCoste = costesLargoPlazo.get(i);
-                solucionEscogible = i;
-            }
-            i++;
-        }
-        if (solucionEscogible == -1){
-            int mayor = Integer.MIN_VALUE;
-            for (int j = 0; i < costesLargoPlazo.size(); ++i){
-                if(mayor < costesLargoPlazo.get(i)){
-                    mayor = costesLargoPlazo.get(i);
-                    solucionEscogible = i;
-                }
-            }
-        }
-        return solucionEscogible;
     }
 
     private void iniciaDLB() {
@@ -168,29 +151,29 @@ public class AlgMA_Clase3_Grupo9 {
     private void oscilacionEstrategica(ArrayList<Integer> conjuntoAux) {
         int aleatorio = random.nextInt(3);
         Pair<Integer, Integer> aux = listaTabu.get(aleatorio);
-        int auxC = conjuntoAux.get(/*aux.fst*/aux.getKey());
-        conjuntoAux.set(/*aux.fst*/aux.getKey(), /*aux.snd*/ aux.getValue());
-        conjuntoAux.set(/*aux.snd*/aux.getValue(), auxC);
+        cambiaConjunto(aux.getKey(), aux.getValue(), conjuntoAux);
     }
 
     private void iniciaLargoPlazo() {
         ArrayList<Integer> aux = new ArrayList<>();
         for (int i = 0; i < conjunto.size(); i++) {
-            for (int j = 0; j < conjunto.size(); j++) {
-                aux.add(0);
-            }
+            aux.add(0);
+        }
+        for (int i = 0; i < conjunto.size(); i++) {
             memLargoPlazo.add(aux);
         }
     }
 
     private void resetLargoPlazo() {
-        ArrayList<Integer> aux = new ArrayList<>();
+        ArrayList<ArrayList<Integer>> aux = new ArrayList<>();
+        ArrayList<Integer> aux2 = new ArrayList<>();
         for (int i = 0; i < conjunto.size(); i++) {
             for (int j = 0; j < conjunto.size(); j++) {
-                aux.set(j, 0);
+                aux2.add(0);
             }
-            memLargoPlazo.set(i, aux);
+            aux.add(aux2);
         }
+        memLargoPlazo = aux;
     }
 
     private boolean compruebaDLB() {
@@ -202,10 +185,11 @@ public class AlgMA_Clase3_Grupo9 {
         return true;
     }
 
-    private void cambiaConjunto(Pair<Integer, Integer> par, ArrayList<Integer> conjuntoAux) {
-        int vAux = conjuntoAux.get(/*par.fst*/par.getKey());
-        conjuntoAux.set(/*par.fst*/par.getKey(), /*par.snd*/ par.getValue());
-        conjuntoAux.set(/*par.snd*/par.getValue(), vAux);
+    private void cambiaConjunto(int r, int s, ArrayList<Integer> conjuntoAux) {
+        int aux = conjuntoAux.get(r);
+        conjuntoAux.set(r, conjuntoAux.get(s));
+        conjuntoAux.set(s, aux);
+        Pair<Integer, Integer> par = new Pair<>(r, s);
         anadirElementoTabu(par);
         incrementaLargoPlazo(par);
     }
@@ -232,14 +216,13 @@ public class AlgMA_Clase3_Grupo9 {
 
     private boolean estaTabu(int r, int s, ArrayList<Integer> conjuntoAux) {
         for (int i = 0; i < listaTabu.size(); i++) {
-            if (/*listaTabu.get(i).fst*/listaTabu.get(i).getKey() == r && /*listaTabu.get(i).snd*/ listaTabu.get(i).getValue() == s) {
+            if (listaTabu.get(i).getKey() == r && listaTabu.get(i).getValue() == s) {
                 return true;
             }
         }
         return false;
     }
 
-    // Muestra los datos (futuro log)
     public String muestraDatos() {
         fin = System.currentTimeMillis();
         String aux = new String();
@@ -251,7 +234,7 @@ public class AlgMA_Clase3_Grupo9 {
                 + " con un tiempo de ejecucion de: " + (fin - inicio) + " milisegundos y es el siguiente: \n" + aux + "\n";
     }
 
-    private boolean factorizacion(int r, int s, ArrayList<Integer> conjuntoAux) {
+    private boolean factorizacion(int r, int s, ArrayList<Integer> conjuntoAux, ArrayList<Integer> mejorPeor, int costeMejorPeor) {
         int matrizF[][] = archivo.getMatriz1();
         int matrizD[][] = archivo.getMatriz2();
         int sum = 0;
@@ -264,18 +247,49 @@ public class AlgMA_Clase3_Grupo9 {
                         + (matrizF[k][r] * (matrizD[conjuntoAux.get(k)][conjuntoAux.get(s)] - matrizD[conjuntoAux.get(k)][conjuntoAux.get(r)])));
             }
         }
-
-        return (sum < 0);
-    }
-    
-    private void anadirElementoTabu(Pair<Integer, Integer> elemento) {
-        if (listaTabu.size() - 1 == tamLista) {
-            for (int i = 0; i < tamLista - 1; i++) {
-                listaTabu.set(i, listaTabu.get(i + 1));
-            }
-            listaTabu.set(tamLista, elemento);
+        sum += (matrizF[r][r] * (matrizD[conjuntoAux.get(s)][conjuntoAux.get(s)] - matrizD[conjuntoAux.get(r)][conjuntoAux.get(r)]))
+                + (matrizF[s][s] * (matrizD[conjuntoAux.get(r)][conjuntoAux.get(r)] - matrizD[conjuntoAux.get(s)][conjuntoAux.get(s)]))
+                + (matrizF[r][s] * (matrizD[conjuntoAux.get(s)][conjuntoAux.get(r)] - matrizD[conjuntoAux.get(s)][conjuntoAux.get(r)]))
+                + (matrizF[s][r] * (matrizD[conjuntoAux.get(r)][conjuntoAux.get(s)] - matrizD[conjuntoAux.get(s)][conjuntoAux.get(r)]));
+        if (sum < 0) {
+            return true;
         } else {
+            ArrayList<Integer> auxMejorPeor = new ArrayList<>(mejorPeor);
+
+            int aux = auxMejorPeor.get(r);
+            auxMejorPeor.set(r, auxMejorPeor.get(s));
+            auxMejorPeor.set(s, aux);
+
+            int costeAux = calculaCosteConjunto(auxMejorPeor);
+            if (costeMejorPeor > costeAux) {
+                for (int i = 0; i < mejorPeor.size(); i++) {
+                    mejorPeor.set(i, auxMejorPeor.get(i));
+                }
+                costeMejorPeor = costeAux;
+            }
+        }
+        return false;
+
+    }
+
+    public int calculaCosteConjunto(ArrayList<Integer> conjunto) {
+        int coste = 0;
+        for (int i = 0; i < conjunto.size(); i++) {
+            for (int j = 0; j < conjunto.size(); j++) {
+                coste += archivo.getMatriz1()[i][j] * archivo.getMatriz2()[conjunto.get(i)][conjunto.get(j)];
+            }
+        }
+        return coste;
+    }
+
+    private void anadirElementoTabu(Pair<Integer, Integer> elemento) {
+        if (listaTabu.size() < tamLista) {
             listaTabu.add(elemento);
+        } else {
+            for (int i = tamLista - 1; i > 0; i--) {
+                listaTabu.set(i, listaTabu.get(i - 1));
+            }
+            listaTabu.set(0, elemento);
         }
     }
 
