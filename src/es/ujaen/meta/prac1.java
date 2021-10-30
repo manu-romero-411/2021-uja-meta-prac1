@@ -33,7 +33,7 @@ public class prac1 {
 
         for (int j = 0; j < config.getSemillas().size(); j++) {
 
-            Log log = new Log(config.getSalidaLog()+"/"+config.getSemillas().get(j));
+            Log log = new Log(config.getSalidaLog()+"_semilla_"+config.getSemillas().get(j));
             Random random = new Random(config.getSemillas().get(j));
 
             System.out.println("GREEDY");
