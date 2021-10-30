@@ -38,13 +38,11 @@ public class AlgPMDLBit_Clase3_Grupo9 {
         greedyA.calculaGreedy();
         this.conjunto = greedyA.getConjunto();
         this.mejorCoste = greedyA.getCosteConjunto();
-        System.out.println("El mejor coste de " + archivo.getNombre() + " es: " + mejorCoste);
         for (int i = 0; i < conjunto.size(); i++) {
             dlb.add(false);
         }
         mejora();
         mejorCoste = greedyA.calculaCosteConjunto(conjunto, archivo.getMatriz1(), archivo.getMatriz2());
-        //muestraDatos();
     }
 
     private void mejora() {
@@ -84,7 +82,6 @@ public class AlgPMDLBit_Clase3_Grupo9 {
             ultMov = (ultMov + 1) % conjunto.size();
             k++;
         }
-        System.out.println("ITERACIONES BUENAS: " + cam);
     }
 
     private boolean compruebaDLB() {

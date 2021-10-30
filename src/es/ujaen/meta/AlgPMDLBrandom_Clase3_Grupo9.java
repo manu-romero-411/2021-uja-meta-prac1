@@ -41,18 +41,15 @@ public class AlgPMDLBrandom_Clase3_Grupo9 {
         greedyA.calculaGreedy();
         this.conjunto = greedyA.getConjunto();
         this.mejorCoste = greedyA.getCosteConjunto();
-        System.out.println("El mejor coste de " + archivo.getNombre() + " es: " + mejorCoste);
         for (int i = 0; i < conjunto.size(); i++) {
             dlb.add(Boolean.FALSE);
         }
         mejora();
         mejorCoste = greedyA.calculaCosteConjunto(conjunto, archivo.getMatriz1(), archivo.getMatriz2());
-        //muestraDatos();
     }
 
     private void mejora() {
         int ultMov = random.nextInt(dlb.size());
-        System.out.println("El valor de inicio es: " + ultMov);
         boolean dlbCompleto = false;
         int cam = 0;
         int k = 0;
@@ -85,7 +82,6 @@ public class AlgPMDLBrandom_Clase3_Grupo9 {
             ultMov = (ultMov + 1) % conjunto.size();
             k++;
         }
-        System.out.println("es.ujaen.meta.AlgPMDLBrandom_Clase3_Grupo9.calculaPrimeroElMejor(): " + cam);
     }
 
     public String muestraDatos() {

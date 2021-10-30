@@ -68,7 +68,6 @@ public class AlgMA_Clase3_Grupo9 {
         ArrayList<ArrayList<Integer>> auxiliar = new ArrayList<>();
         for (int i = 0; i < longitudLRC; i++) {
             Pair<Integer, Integer> aux = LRC.get(i);
-            System.out.println("Vez: " + i);
             conjunto = hazMultiArranque(aux);
             costes.add(calculaCosteConjunto(conjunto));
             auxiliar.add(conjunto);
@@ -81,7 +80,6 @@ public class AlgMA_Clase3_Grupo9 {
             }
         }
         conjunto = auxiliar.get(posCoste);
-        muestraAuxConjunto(conjunto);
         coste = calculaCosteConjunto(conjunto);
     }
 
@@ -135,12 +133,6 @@ public class AlgMA_Clase3_Grupo9 {
             }
             ultMov = (ultMov + 1) % conjunto.size();
             k++;
-        }
-    }
-
-    private void muestraAuxConjunto(ArrayList<Integer> auxConjunto) {
-        for (int i = 0; i < auxConjunto.size(); i++) {
-            System.out.print(auxConjunto.get(i) + " ");
         }
     }
 
