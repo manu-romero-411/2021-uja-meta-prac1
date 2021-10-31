@@ -33,49 +33,50 @@ public class prac1 {
 
         for (int j = 0; j < config.getSemillas().size(); j++) {
 
-            Log log = new Log(config.getSalidaLog()+"_semilla_"+config.getSemillas().get(j));
+            Log log = new Log("logs/"+config.getSalidaLog()+"_semilla_"+config.getSemillas().get(j));
             Random random = new Random(config.getSemillas().get(j));
 
-            System.out.println("GREEDY");
+            System.out.println("SEMILLA: "+ config.getSemillas().get(j));
+            
             for (int i = 0; i < arrayA.size(); i++) {
+                System.out.println("* Ejecutando GREEDY - ARCHIVO " + (i+1) + " EJECUCIÓN " + (j+1));
                 AlgGRE_Clase3_Grupo9 greedy = new AlgGRE_Clase3_Grupo9(arrayA.get(i));
                 greedy.calculaGreedy();
-                System.out.print(greedy.muestraDatos());
+                //System.out.print(greedy.muestraDatos());
                 log.addTexto(greedy.muestraDatos());
             }
 
-            System.out.println("");
             log.addTexto("\n");
-            System.out.println("PRIMERO EL MEJOR IT");
             for (int i = 0; i < arrayA.size(); i++) {
+                System.out.println("* Ejecutando PRIMER MEJOR ITERATIVO - ARCHIVO " + (i+1) + " EJECUCIÓN " + (j+1));
                 AlgPMDLBit_Clase3_Grupo9 primero = new AlgPMDLBit_Clase3_Grupo9(arrayA.get(i), config.getIteraciones());
-                primero.calculaPrimeroElMejor();
-                System.out.print(primero.muestraDatos());
+                primero.calculaPrimerMejor();
+                //System.out.print(primero.muestraDatos());
                 log.addTexto(primero.muestraDatos());
             }
 
-            System.out.println("");
             log.addTexto("\n");
-            System.out.println("PRIMERO EL MEJOR RAN");
             for (int i = 0; i < arrayA.size(); i++) {
+                System.out.println("* Ejecutando PRIMER MEJOR ALEATORIO - ARCHIVO " + (i+1) + " EJECUCIÓN " + (j+1));
                 AlgPMDLBrandom_Clase3_Grupo9 primeroAle = new AlgPMDLBrandom_Clase3_Grupo9(arrayA.get(i), config.getIteraciones(), random);
                 primeroAle.calculaPrimeroElMejor();
-                System.out.print(primeroAle.muestraDatos());
+                //System.out.print(primeroAle.muestraDatos());
                 log.addTexto(primeroAle.muestraDatos());
             }
 
-            System.out.println("");
             log.addTexto("\n");
-            System.out.println("MULTIARRANQUE");
             for (int i = 0; i < arrayA.size(); i++) {
+                System.out.println("* Ejecutando MULTIARRANQUE - ARCHIVO " + (i+1) + " EJECUCIÓN " + (j+1));
                 AlgMA_Clase3_Grupo9 multiA = new AlgMA_Clase3_Grupo9(arrayA.get(i), config.getIteraciones(),
                         config.getLonguitudLRC(), config.getCandidatosGreedy(), config.getTamLista(), config.getIteracionesEstrategica(), random);
                 multiA.calculaMultiarranque();
-                System.out.print(multiA.muestraDatos());
+               // System.out.print(multiA.muestraDatos());
                 log.addTexto(multiA.muestraDatos());
             }
 
             log.guardaLog();
+            System.out.println();
         }
+        System.out.println("Las ejecuciones han terminado. Los resultados estarán en los logs junto al ejecutable.");
     }
 }

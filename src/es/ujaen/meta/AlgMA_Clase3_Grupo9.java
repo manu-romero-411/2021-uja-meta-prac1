@@ -34,7 +34,6 @@ public class AlgMA_Clase3_Grupo9 {
     private ArrayList<Boolean> dlb;
     private final int longitudLRC;
     private boolean flagMejora;
-    private ArrayList<Integer> costesLargoPlazo = new ArrayList<>();
 
     public AlgMA_Clase3_Grupo9(Archivodedatos archivo, int iteraciones, int longitudLRC, int mejoresUnidades, int tamLista, float iteracionesOscilacion, Random random) {
         this.archivo = archivo;
@@ -54,7 +53,6 @@ public class AlgMA_Clase3_Grupo9 {
         this.dlb = new ArrayList<>();
         this.flagMejora = true;
         this.inicio = System.currentTimeMillis();
-        this.costesLargoPlazo = new ArrayList<>();
 
     }
 
@@ -229,7 +227,7 @@ public class AlgMA_Clase3_Grupo9 {
         for (int i = 0; i < conjunto.size(); i++) {
             aux += conjunto.get(i) + "  ";
         }
-        System.out.println();
+        //System.out.println();
         return "MULTIARRANQUE \nEl conjunto de archivos de datos " + archivo.getNombre() + " tiene un coste de " + coste
                 + " con un tiempo de ejecucion de: " + (fin - inicio) + " milisegundos y es el siguiente: \n" + aux + "\n";
     }
