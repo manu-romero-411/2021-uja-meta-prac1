@@ -19,6 +19,7 @@ public class AlgGRE_Clase3_Grupo9 {
     private int costeConjunto;
     private final Archivodedatos archivo;
 
+    //Constructor de la clase
     public AlgGRE_Clase3_Grupo9(Archivodedatos archivo) {
         inicio = System.currentTimeMillis();
         this.conjunto = new ArrayList<>();
@@ -26,37 +27,25 @@ public class AlgGRE_Clase3_Grupo9 {
         this.archivo = archivo;
     }
 
-    // Calcula el greedy haciendo las llamadas
+    //Calcula el greedy y su coste
     public void calculaGreedy() {
 
         creaConjunto(archivo.getMatriz1(), archivo.getMatriz2());
-        costeConjunto = calculaCosteConjunto(conjunto, archivo.getMatriz1(), archivo.getMatriz2());
+        costeConjunto = calculaCosteConjunto(conjunto);
     }
 
-    // Muestra los datos (futuro log)
-    public String muestraDatos() {
-        fin = System.currentTimeMillis();
-        String aux = new String();
-        for (int i = 0; i < conjunto.size(); i++) {
-            aux += conjunto.get(i) + "  ";
-        }
-        System.out.println();
-        return "GREEDY \nEl conjunto de archivos de datos " + archivo.getNombre() + " tiene un coste de " + costeConjunto
-                + " con un tiempo de ejecucion de: " + (fin - inicio) + " milisegundos y es el siguiente: \n" + aux + "\n";
-    }
-
-    // Calcula el coste de un conjunto dado
-    public int calculaCosteConjunto(ArrayList<Integer> conjunto, int matrizFlujo[][], int matrizDistancia[][]) {
+    //Calcula el coste de un conjunto dado
+    private int calculaCosteConjunto(ArrayList<Integer> conjunto) {
         int coste = 0;
         for (int i = 0; i < conjunto.size(); i++) {
             for (int j = 0; j < conjunto.size(); j++) {
-                coste += matrizFlujo[i][j] * matrizDistancia[conjunto.get(i)][conjunto.get(j)];
+                coste += archivo.getMatriz1()[i][j] * archivo.getMatriz2()[conjunto.get(i)][conjunto.get(j)];
             }
         }
         return coste;
     }
 
-    // Crea el conjunto del greedy
+    //Crea el conjunto del greedy
     private void creaConjunto(int matrizFlujo[][], int matrizDistancia[][]) {
         ArrayList<Integer> terminado = new ArrayList<>();
         ArrayList<Integer> auxF;
@@ -91,8 +80,8 @@ public class AlgGRE_Clase3_Grupo9 {
         this.conjunto = terminado;
     }
 
-    // Función auxiliar que suma las filas de las matrices
-    public static ArrayList<Integer> sumaFilas(int matriz[][]) {
+    //Función auxiliar que suma las filas de las matrices
+    public ArrayList<Integer> sumaFilas(int matriz[][]) {
         ArrayList<Integer> arrayS = new ArrayList<>();
         int sumador = 0;
         for (int i = 0; i < matriz.length; i++) {
@@ -104,7 +93,21 @@ public class AlgGRE_Clase3_Grupo9 {
         }
         return arrayS;
     }
+    
+    //Funcion para añadir la informacion a los logs
+    public String muestraDatos() {
+        fin = System.currentTimeMillis();
+        String aux = new String();
+        for (int i = 0; i < conjunto.size(); i++) {
+            aux += conjunto.get(i) + "  ";
+        }
+        System.out.println();
+        return "GREEDY \nEl conjunto de archivos de datos " + archivo.getNombre() + " tiene un coste de " + costeConjunto
+                + " con un tiempo de ejecucion de: " + (fin - inicio) + " milisegundos y es el siguiente: \n" + aux + "\n";
+    }
 
+    //Getters y Setters
+    
     public ArrayList<Integer> getConjunto() {
         return conjunto;
     }

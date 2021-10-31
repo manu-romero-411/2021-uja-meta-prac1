@@ -21,9 +21,10 @@ public class AlgPMDLBrandom_Clase3_Grupo9 {
     private final Archivodedatos archivo;
     private final int iteraciones;
     private final Random random;
-    private ArrayList<Boolean> dlb;
+    private final ArrayList<Boolean> dlb;
     private boolean flagMejora;
 
+    //Constructor de la clase
     public AlgPMDLBrandom_Clase3_Grupo9(Archivodedatos archivo, int iteraciones, Random random) {
         this.conjunto = new ArrayList<>();
         this.mejorCoste = 0;
@@ -35,8 +36,8 @@ public class AlgPMDLBrandom_Clase3_Grupo9 {
         this.inicio = System.currentTimeMillis();
     }
 
-    // Calcula el primero el mejor random
-    public void calculaPrimeroElMejor() {
+    //Calcula el primer mejor aleatorio
+    public void calculaPrimerMejorAleatorio() {
         AlgGRE_Clase3_Grupo9 greedy = new AlgGRE_Clase3_Grupo9(archivo);
         greedy.calculaGreedy();
         this.conjunto = greedy.getConjunto();
@@ -46,12 +47,14 @@ public class AlgPMDLBrandom_Clase3_Grupo9 {
         mejorCoste = calculaCosteConjunto(conjunto);
     }
     
+    //Inicia el DLB a falso
     private void iniciaDLB() {
         for (int i = 0; i < conjunto.size(); i++) {
             dlb.add(false);
         }
     }
 
+    //Realiza la operacion de mejora del conjunto
     private void mejora() {
         int ultMov = random.nextInt(dlb.size());
         boolean dlbCompleto = false;
@@ -86,7 +89,8 @@ public class AlgPMDLBrandom_Clase3_Grupo9 {
         }
     }
 
-    public int calculaCosteConjunto(ArrayList<Integer> conjunto) {
+    //Calcula el coste del conjunto dado
+    private int calculaCosteConjunto(ArrayList<Integer> conjunto) {
         int coste = 0;
         for (int i = 0; i < conjunto.size(); i++) {
             for (int j = 0; j < conjunto.size(); j++) {
@@ -96,18 +100,7 @@ public class AlgPMDLBrandom_Clase3_Grupo9 {
         return coste;
     }
     
-    public String muestraDatos() {
-        fin = System.currentTimeMillis();
-        String aux = new String();
-        for (int i = 0; i < conjunto.size(); i++) {
-            aux += conjunto.get(i) + "  ";
-        }
-        System.out.println();
-        return "PRIMERO EL MEJOR RANDOM \nEl conjunto de archivos de datos " + archivo.getNombre() + " tiene un coste de " + mejorCoste
-                + " con un tiempo de ejecucion de: " + (fin - inicio) + " milisegundos y es el siguiente: \n" + aux + "\n";
-    }
-
-    // Comprueba si el movimiento mejora
+    //Comprueba si el movimiento mejora, devuelve true si la suma es menor a cero y false si es mayor o igual
     private boolean checkMove(int r, int s) {
         int matrizF[][] = archivo.getMatriz1();
         int matrizD[][] = archivo.getMatriz2();
@@ -128,13 +121,14 @@ public class AlgPMDLBrandom_Clase3_Grupo9 {
         return (sum < 0);
     }
 
-    // Aplica el movimiento de mejora
+    //Aplica el movimiento de mejora
     private void applyMove(int r, int s) {
         int valorR = conjunto.get(r);
         conjunto.set(r, conjunto.get(s));
         conjunto.set(s, valorR);
     }
 
+    //Comprueba si el DLB esta completo
     private boolean compruebaDLB() {
         for (int i = 0; i < dlb.size(); i++) {
             if (!dlb.get(i)) {
@@ -144,7 +138,21 @@ public class AlgPMDLBrandom_Clase3_Grupo9 {
         return true;
     }
 
-    public ArrayList<Integer> getConjuntos() {
+    //Funcion para añadir la informacion a los logs
+    public String muestraDatos() {
+        fin = System.currentTimeMillis();
+        String aux = new String();
+        for (int i = 0; i < conjunto.size(); i++) {
+            aux += conjunto.get(i) + "  ";
+        }
+        System.out.println();
+        return "PRIMER MEJOR ALEATORIO \nEl conjunto de archivos de datos " + archivo.getNombre() + " tiene un coste de " + mejorCoste
+                + " con un tiempo de ejecucion de: " + (fin - inicio) + " milisegundos y es el siguiente: \n" + aux + "\n";
+    }
+    
+    //Getters y Setters
+    
+    public ArrayList<Integer> getConjunto() {
         return conjunto;
     }
 

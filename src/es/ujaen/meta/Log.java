@@ -15,8 +15,8 @@ import java.io.PrintWriter;
  */
 public class Log {
 
-    private StringBuilder texto;
-    private String ruta;
+    private final StringBuilder texto;
+    private final String ruta;
 
     public Log(String ruta) {
         this.texto = new StringBuilder();

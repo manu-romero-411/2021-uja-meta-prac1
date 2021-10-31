@@ -5,9 +5,6 @@
  */
 package es.ujaen.meta;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -31,14 +28,16 @@ public class prac1 {
             arrayA.add(archivo);
         }
 
+        //Se repite por cada semilla dada en el archivo config
         for (int j = 0; j < config.getSemillas().size(); j++) {
 
+            //Creacion del log y su nombre
             Log log = new Log(config.getSalidaLog()+"_semilla_"+config.getSemillas().get(j));
             Random random = new Random(config.getSemillas().get(j));
 
             System.out.println("SEMILLA: "+ config.getSemillas().get(j));
             
-            System.out.println("GREEDY");
+            //Greedy
             for (int i = 0; i < arrayA.size(); i++) {
                 AlgGRE_Clase3_Grupo9 greedy = new AlgGRE_Clase3_Grupo9(arrayA.get(i));
                 greedy.calculaGreedy();
@@ -46,29 +45,26 @@ public class prac1 {
                 log.addTexto(greedy.muestraDatos());
             }
 
-            System.out.println("");
+            //Primer Mejor Iterativo
             log.addTexto("\n");
-            System.out.println("PRIMERO EL MEJOR IT");
             for (int i = 0; i < arrayA.size(); i++) {
                 AlgPMDLBit_Clase3_Grupo9 primero = new AlgPMDLBit_Clase3_Grupo9(arrayA.get(i), config.getIteraciones());
-                primero.calculaPrimerMejor();
+                primero.calculaPrimerMejorIterativo();
                 System.out.print(primero.muestraDatos());
                 log.addTexto(primero.muestraDatos());
             }
 
-            System.out.println("");
+            //Primer Mejor Aleatorio
             log.addTexto("\n");
-            System.out.println("PRIMERO EL MEJOR RAN");
             for (int i = 0; i < arrayA.size(); i++) {
                 AlgPMDLBrandom_Clase3_Grupo9 primeroAle = new AlgPMDLBrandom_Clase3_Grupo9(arrayA.get(i), config.getIteraciones(), random);
-                primeroAle.calculaPrimeroElMejor();
+                primeroAle.calculaPrimerMejorAleatorio();
                 System.out.print(primeroAle.muestraDatos());
                 log.addTexto(primeroAle.muestraDatos());
             }
 
-            System.out.println("");
+            //Multiarranque
             log.addTexto("\n");
-            System.out.println("MULTIARRANQUE");
             for (int i = 0; i < arrayA.size(); i++) {
                 AlgMA_Clase3_Grupo9 multiA = new AlgMA_Clase3_Grupo9(arrayA.get(i), config.getIteraciones(),
                         config.getLonguitudLRC(), config.getCandidatosGreedy(), config.getTamLista(), config.getIteracionesEstrategica(), random);
@@ -77,6 +73,7 @@ public class prac1 {
                 log.addTexto(multiA.muestraDatos());
             }
 
+            //Guardado del log
             log.guardaLog();
         }
     }

@@ -22,6 +22,7 @@ public class AlgPMDLBit_Clase3_Grupo9 {
     private final ArrayList<Boolean> dlb;
     private boolean flagMejora;
 
+    //Constructor de la clase
     public AlgPMDLBit_Clase3_Grupo9(Archivodedatos archivo, int iteraciones) {
         this.conjunto = new ArrayList<>();
         this.mejorCoste = 0;
@@ -33,7 +34,7 @@ public class AlgPMDLBit_Clase3_Grupo9 {
     }
 
     // Calcula el primero el mejor iterativo
-    public void calculaPrimerMejor() {
+    public void calculaPrimerMejorIterativo() {
         AlgGRE_Clase3_Grupo9 greedy = new AlgGRE_Clase3_Grupo9(archivo);
         greedy.calculaGreedy();
         this.conjunto = greedy.getConjunto();
@@ -43,12 +44,14 @@ public class AlgPMDLBit_Clase3_Grupo9 {
         mejorCoste = calculaCosteConjunto(conjunto);
     }
 
+    //Inicia el DLB a falso
     private void iniciaDLB() {
         for (int i = 0; i < conjunto.size(); i++) {
             dlb.add(false);
         }
     }
 
+    //Realiza la operacion de mejora del conjunto
     private void mejora() {
         boolean dlbCompleto = false;
         int ultMov = 0;
@@ -86,7 +89,8 @@ public class AlgPMDLBit_Clase3_Grupo9 {
         }
     }
 
-    public int calculaCosteConjunto(ArrayList<Integer> conjunto) {
+    //Calcula el coste del conjunto dado
+    private int calculaCosteConjunto(ArrayList<Integer> conjunto) {
         int coste = 0;
         for (int i = 0; i < conjunto.size(); i++) {
             for (int j = 0; j < conjunto.size(); j++) {
@@ -96,6 +100,7 @@ public class AlgPMDLBit_Clase3_Grupo9 {
         return coste;
     }
 
+    //Comprueba si el DLB esta completo
     private boolean compruebaDLB() {
         for (int i = 0; i < dlb.size(); i++) {
             if (!dlb.get(i)) {
@@ -105,19 +110,7 @@ public class AlgPMDLBit_Clase3_Grupo9 {
         return true;
     }
 
-    // Muestra los datos (futuro log)
-    public String muestraDatos() {
-        fin = System.currentTimeMillis();
-        String aux = new String();
-        for (int i = 0; i < conjunto.size(); i++) {
-            aux += conjunto.get(i) + "  ";
-        }
-        System.out.println();
-        return "PRIMERO EL MEJOR IT \nEl conjunto de archivos de datos " + archivo.getNombre() + " tiene un coste de " + mejorCoste
-                + " con un tiempo de ejecucion de: " + (fin - inicio) + " milisegundos y es el siguiente: \n" + aux + "\n";
-    }
-
-    // Comprueba si el movimiento mejora
+    //Comprueba si el movimiento mejora
     private boolean checkMove(int r, int s) {
         int matrizF[][] = archivo.getMatriz1();
         int matrizD[][] = archivo.getMatriz2();
@@ -139,14 +132,28 @@ public class AlgPMDLBit_Clase3_Grupo9 {
         return (sum < 0);
     }
 
-    // Aplica el movimiento de mejora
+    //Aplica el movimiento de mejora
     private void applyMove(int r, int s) {
         int valorR = conjunto.get(r);
         conjunto.set(r, conjunto.get(s));
         conjunto.set(s, valorR);
     }
+    
+    //Funcion para añadir la informacion a los logs
+    public String muestraDatos() {
+        fin = System.currentTimeMillis();
+        String aux = new String();
+        for (int i = 0; i < conjunto.size(); i++) {
+            aux += conjunto.get(i) + "  ";
+        }
+        System.out.println();
+        return "PRIMER MEJOR ITERATIVO \nEl conjunto de archivos de datos " + archivo.getNombre() + " tiene un coste de " + mejorCoste
+                + " con un tiempo de ejecucion de: " + (fin - inicio) + " milisegundos y es el siguiente: \n" + aux + "\n";
+    }
 
-    public ArrayList<Integer> getConjuntos() {
+    //Getters y Setters
+    
+    public ArrayList<Integer> getConjunto() {
         return conjunto;
     }
 
