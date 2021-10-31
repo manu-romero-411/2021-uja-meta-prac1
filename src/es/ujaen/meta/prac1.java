@@ -32,11 +32,11 @@ public class prac1 {
         for (int j = 0; j < config.getSemillas().size(); j++) {
 
             //Creacion del log y su nombre
-            Log log = new Log(config.getSalidaLog()+"_semilla_"+config.getSemillas().get(j));
+            Log log = new Log(config.getSalidaLog() + "_semilla_" + config.getSemillas().get(j));
             Random random = new Random(config.getSemillas().get(j));
 
-            System.out.println("SEMILLA: "+ config.getSemillas().get(j));
-            
+            System.out.println("SEMILLA: " + config.getSemillas().get(j));
+
             //Greedy
             for (int i = 0; i < arrayA.size(); i++) {
                 AlgGRE_Clase3_Grupo9 greedy = new AlgGRE_Clase3_Grupo9(arrayA.get(i));
@@ -67,7 +67,7 @@ public class prac1 {
             log.addTexto("\n");
             for (int i = 0; i < arrayA.size(); i++) {
                 AlgMA_Clase3_Grupo9 multiA = new AlgMA_Clase3_Grupo9(arrayA.get(i), config.getIteraciones(),
-                        config.getLonguitudLRC(), config.getCandidatosGreedy(), config.getTamLista(), config.getIteracionesEstrategica(), random);
+                        config.getLonguitudLRC(), config.getCandidatosGreedy(), config.getTamLista(), config.getOscilacionEstrategica(), config.getIteracionesEstrategica(), random);
                 multiA.calculaMultiarranque();
                 System.out.print(multiA.muestraDatos());
                 log.addTexto(multiA.muestraDatos());

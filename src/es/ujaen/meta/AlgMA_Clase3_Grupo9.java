@@ -26,6 +26,7 @@ public class AlgMA_Clase3_Grupo9 {
     private final int iteraciones;
     private final int candidatosGreedy;
     private final int tamLista;
+    private final float probOscilacion;
     private final float iteracionesOscilacion;
     private final Random random;
     private final ArrayList<Pair<Integer, Integer>> LRC;
@@ -36,12 +37,13 @@ public class AlgMA_Clase3_Grupo9 {
     private boolean flagMejora;
 
     //Constructor de la clase
-    public AlgMA_Clase3_Grupo9(Archivodedatos archivo, int iteraciones, int longitudLRC, int mejoresUnidades, int tamLista, float iteracionesOscilacion, Random random) {
+    public AlgMA_Clase3_Grupo9(Archivodedatos archivo, int iteraciones, int longitudLRC, int mejoresUnidades, int tamLista, float probOscilacion, float iteracionesOscilacion, Random random) {
         this.archivo = archivo;
         this.iteraciones = iteraciones;
         this.longitudLRC = longitudLRC;
         this.candidatosGreedy = mejoresUnidades;
         this.iteracionesOscilacion = iteracionesOscilacion;
+        this.probOscilacion = probOscilacion;
         this.tamLista = tamLista;
         this.random = random;
         this.coste = 0;
@@ -99,7 +101,7 @@ public class AlgMA_Clase3_Grupo9 {
             memLargoPlazo.add(aux);
         }
     }
-    
+
     //Crea la lista restringida de cantidados con el GRASP
     private void creaLRC() {
         AlgGRE_Clase3_Grupo9 greedy = new AlgGRE_Clase3_Grupo9(archivo);
@@ -152,8 +154,7 @@ public class AlgMA_Clase3_Grupo9 {
                         } else {
                             sinCambiosIt++;
                             if (sinCambiosIt == (int) iteraciones * iteracionesOscilacion) {
-                                oscilacionEstrategica(auxConjunto);
-                                sinCambiosIt = 0;
+                                oscilacionEstrategica(auxConjunto, sinCambiosIt);
                             }
                         }
                     }
@@ -261,10 +262,13 @@ public class AlgMA_Clase3_Grupo9 {
     }
 
     //Realiza la oscilacion estrategica con la lista tabu, cogiendo un valor
-    private void oscilacionEstrategica(ArrayList<Integer> conjuntoAux) {
-        int aleatorio = random.nextInt(tamLista);
-        Pair<Integer, Integer> aux = listaTabu.get(aleatorio);
-        cambiaConjunto(aux.getKey(), aux.getValue(), conjuntoAux);
+    private void oscilacionEstrategica(ArrayList<Integer> conjuntoAux, int sinCambiosIt) {
+        if (probOscilacion * 100 > random.nextInt(101)) {
+            int aleatorio = random.nextInt(tamLista);
+            Pair<Integer, Integer> aux = listaTabu.get(aleatorio);
+            cambiaConjunto(aux.getKey(), aux.getValue(), conjuntoAux);
+            sinCambiosIt = 0;
+        }
     }
 
     //Comprueba si el DLB esta completo
